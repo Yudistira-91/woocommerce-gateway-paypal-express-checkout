@@ -974,6 +974,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			if ( 'authorization' === $payment->pending_reason ) {
 				$order->update_status( 'on-hold', __( 'Payment authorized. Change payment status to processing or complete to capture funds.', 'woocommerce-gateway-paypal-express-checkout' ) );
 			} else {
+				// Translators: placeholder is the reason for the payment to be in pending state.
 				$order->update_status( 'on-hold', sprintf( __( 'Payment pending (%s).', 'woocommerce-gateway-paypal-express-checkout' ), $payment->pending_reason ) );
 			}
 			if ( $old_wc ) {

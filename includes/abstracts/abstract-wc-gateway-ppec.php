@@ -200,16 +200,20 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				$valid_until = $certinfo['validTo_time_t'];
 				if ( $valid_until < time() ) {
 					// Display in red if the cert is already expired
+					// Translators: placeholder is a date.
 					$expires = '<span style="color: red;">' . __( 'expired on %s', 'woocommerce-gateway-paypal-express-checkout' ) . '</span>';
 				} elseif ( $valid_until < ( time() - 2592000 ) ) {
 					// Also display in red if the cert is going to expire in the next 30 days
+					// Translators: placeholder is a date.
 					$expires = '<span style="color: red;">' . __( 'expires on %s', 'woocommerce-gateway-paypal-express-checkout' ) . '</span>';
 				} else {
 					// Otherwise just display a normal message
+					// Translators: placeholder is a date.
 					$expires = __( 'expires on %s', 'woocommerce-gateway-paypal-express-checkout' );
 				}
 
 				$expires = sprintf( $expires, date_i18n( get_option( 'date_format' ), $valid_until ) );
+				// Translators: 1) is the certificate Common Name (CN), 2) is the certificate expiration date.
 				$out = sprintf( __( 'Certificate belongs to API username %1$s; %2$s', 'woocommerce-gateway-paypal-express-checkout' ), $certinfo['subject']['CN'], $expires );
 			} else {
 				$out = __( 'The certificate on file is not valid.', 'woocommerce-gateway-paypal-express-checkout' );
@@ -377,6 +381,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				try {
 					$refund_txn_id = WC_Gateway_PPEC_Refund::refund_order( $order, $amount, $refund_type, $reason, $order_currency );
 					$txn_data['refundable_txns'][ $key ]['refunded_amount'] += $amount;
+					// Translators: placeholder is a transaction ID.
 					$order->add_order_note( sprintf( __( 'PayPal refund completed; transaction ID = %s', 'woocommerce-gateway-paypal-express-checkout' ), $refund_txn_id ) );
 					if ( $old_wc ) {
 						update_post_meta( $order_id, '_woo_pp_txnData', $txn_data );
@@ -400,6 +405,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				try {
 					$refund_txn_id = WC_Gateway_PPEC_Refund::refund_order( $order, $amount, 'Partial', $reason, $order_currency );
 					$txn_data['refundable_txns'][ $key ]['refunded_amount'] += $amount;
+					// Translators: placeholder is a transaction ID.
 					$order->add_order_note( sprintf( __( 'PayPal refund completed; transaction ID = %s', 'woocommerce-gateway-paypal-express-checkout' ), $refund_txn_id ) );
 					if ( $old_wc ) {
 						update_post_meta( $order_id, '_woo_pp_txnData', $txn_data );
@@ -425,6 +431,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 			if ( 0 == $total_refundable_amount ) {
 				return new WP_Error( 'paypal_refund_error', __( 'Refund Error: All transactions have been fully refunded. There is no amount left to refund', 'woocommerce-gateway-paypal-express-checkout' ) );
 			} else {
+				// Translators: placeholder is an amount.
 				return new WP_Error( 'paypal_refund_error', sprintf( __( 'Refund Error: The requested refund amount is too large. The refund amount must be less than or equal to %s.', 'woocommerce-gateway-paypal-express-checkout' ), html_entity_decode( get_woocommerce_currency_symbol() ) . $total_refundable_amount ) );
 			}
 		} else {
@@ -449,6 +456,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 						$refund_txn_id = WC_Gateway_PPEC_Refund::refund_order( $order, $amount_to_refund, $refund_type, $reason, $order_currency );
 						$total_to_refund -= $amount_to_refund;
 						$txn_data['refundable_txns'][ $key ]['refunded_amount'] += $amount_to_refund;
+						// Translators: placeholder is a transaction ID.
 						$order->add_order_note( sprintf( __( 'PayPal refund completed; transaction ID = %s', 'woocommerce-gateway-paypal-express-checkout' ), $refund_txn_id ) );
 						if ( $old_wc ) {
 							update_post_meta( $order_id, '_woo_pp_txnData', $txn_data );
@@ -540,6 +548,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 					if ( ! $value_is_url ) {
 						echo wp_get_attachment_image( $value, 'thumbnail' );
 					} else {
+						// Translators: placeholder is an URL.
 						echo sprintf( __( 'Already using URL as image: %s', 'woocommerce-gateway-paypal-express-checkout' ), $value );
 					}
 					?>

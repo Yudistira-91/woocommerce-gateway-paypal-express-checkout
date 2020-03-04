@@ -181,6 +181,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 						update_post_meta( $order_id, '_transaction_id', $result['TRANSACTIONID'] );
 					}
 
+					// Translators: placeholder is a transaction ID.
 					$order->add_order_note( sprintf( __( 'PayPal Checkout charge complete (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
 				}
 			}
@@ -225,6 +226,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 				if ( is_wp_error( $result ) ) {
 					$order->add_order_note( __( 'Unable to void charge!', 'woocommerce-gateway-paypal-express-checkout' ) . ' ' . $result->get_error_message() );
 				} else {
+					// Translators: placeholder is a transaction ID.
 					$order->add_order_note( sprintf( __( 'PayPal Checkout charge voided (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
 				}
 			}
@@ -380,6 +382,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 			<p>
 			<?php
 			printf(
+				/* Translators: 1) is a <strong> opening tag, 2) is a </strong> closing tag, 3) is the WC version, 4) is a link tag to the Plugins screen, 5) is the closing </a> tag for the link. */
 				__( '%1$sWarning!%2$s PayPal Checkout will drop support for WooCommerce %3$s in a soon to be released update. To continue using PayPal Checkout please %4$supdate to %1$sWooCommerce 3.0%2$s or greater%5$s.', 'woocommerce-gateway-paypal-express-checkout' ),
 				'<strong>', '</strong>',
 				WC_VERSION,

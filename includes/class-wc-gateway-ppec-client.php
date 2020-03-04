@@ -187,6 +187,7 @@ class WC_Gateway_PPEC_Client {
 	 */
 	protected function _process_response( $response ) {
 		if ( is_wp_error( $response ) ) {
+			// Translators: placeholder is an error message.
 			throw new Exception( sprintf( __( 'An error occurred while trying to connect to PayPal: %s', 'woocommerce-gateway-paypal-express-checkout' ), $response->get_error_message() ), self::REQUEST_ERROR );
 		}
 
@@ -394,7 +395,7 @@ class WC_Gateway_PPEC_Client {
 	 */
 	protected function _get_billing_agreement_description() {
 		/* translators: placeholder is blogname */
-		$description = sprintf( _x( 'Orders with %s', 'data sent to PayPal', 'woocommerce-subscriptions' ), get_bloginfo( 'name' ) );
+		$description = sprintf( _x( 'Orders with %s', 'data sent to PayPal', 'woocommerce-gateway-paypal-express-checkout' ), get_bloginfo( 'name' ) );
 
 		if ( strlen( $description ) > 127 ) {
 			$description = substr( $description, 0, 124 ) . '...';
