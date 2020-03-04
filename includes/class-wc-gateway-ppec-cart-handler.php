@@ -1,6 +1,8 @@
 <?php
 /**
  * Cart handler.
+ *
+ * @package WooCommerce_PPEC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -170,6 +172,8 @@ class WC_Gateway_PPEC_Cart_Handler {
 	 * Report validation errors if any, or else save form data in session and proceed with checkout flow.
 	 *
 	 * @since 1.6.4
+	 * @param  array    $data   An array of posted data.
+	 * @param  WP_Error $errors Validation errors.
 	 */
 	public function maybe_start_checkout( $data, $errors = null ) {
 		if ( is_null( $errors ) ) {
@@ -209,6 +213,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 	 * Store checkout form data in customer session.
 	 *
 	 * @since 1.6.4
+	 * @param array $data An array of posted data.
 	 */
 	protected function set_customer_data( $data ) {
 		$customer = WC()->customer;
@@ -331,7 +336,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 		$settings = wc_gateway_ppec()->settings;
 
-		// billing details on checkout page to calculate shipping costs
+		// billing details on checkout page to calculate shipping costs.
 		if ( ! isset( $gateways['ppec_paypal'] ) || 'no' === $settings->cart_checkout_enabled ) {
 			return;
 		}
@@ -375,7 +380,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 		$settings = wc_gateway_ppec()->settings;
 
-		// billing details on checkout page to calculate shipping costs
+		// billing details on checkout page to calculate shipping costs.
 		if ( ! isset( $gateways['ppec_paypal'] ) || 'no' === $settings->cart_checkout_enabled || 0 === WC()->cart->get_cart_contents_count() || ! WC()->cart->needs_payment() ) {
 			return;
 		}
@@ -394,6 +399,14 @@ class WC_Gateway_PPEC_Cart_Handler {
 		<?php
 	}
 
+	/**
+	 * Enqueues the SPB javascript if the Cart widget is enabled.
+	 *
+	 * @param string      $widget_title    Widget's title.
+	 * @param array       $widget_instance Widget's instance.
+	 * @param string|null $widget_id       Widget's ID.
+	 * @return string
+	 */
 	public function maybe_enqueue_checkout_js( $widget_title, $widget_instance = array(), $widget_id = null ) {
 		if ( 'woocommerce_widget_cart' === $widget_id ) {
 			$gateways = WC()->payment_gateways->get_available_payment_gateways();
@@ -413,7 +426,8 @@ class WC_Gateway_PPEC_Cart_Handler {
 	 *   - 'allowed' funding methods if layout is 'horizontal'.
 	 *   - Only allow PayPal Credit if supported.
 	 *
-	 * @param array Raw settings.
+	 * @param array  $settings Raw settings.
+	 * @param string $context  Context.
 	 *
 	 * @return array Same array adapted to include data suitable for client-side rendering.
 	 *
@@ -552,6 +566,8 @@ class WC_Gateway_PPEC_Cart_Handler {
 	}
 
 	/**
+	 * Deprecated method. Doesn't do anything.
+	 *
 	 * @deprecated
 	 */
 	public function loadCartDetails() {
@@ -559,13 +575,18 @@ class WC_Gateway_PPEC_Cart_Handler {
 	}
 
 	/**
+	 * Deprecated method. Doesn't do anything.
+	 *
 	 * @deprecated
+	 * @param int $order_id Deprecated parameter.
 	 */
 	public function loadOrderDetails( $order_id ) {
 		_deprecated_function( __METHOD__, '1.2.0', '' );
 	}
 
 	/**
+	 * Deprecated method. Doesn't do anything.
+	 *
 	 * @deprecated
 	 */
 	public function setECParams() {

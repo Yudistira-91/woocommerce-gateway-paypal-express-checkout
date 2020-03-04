@@ -1,9 +1,12 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_Client_Credential_Signature
+ */
 class WC_Gateway_PPEC_Client_Credential_Signature extends WC_Gateway_PPEC_Client_Credential {
 
 	/**

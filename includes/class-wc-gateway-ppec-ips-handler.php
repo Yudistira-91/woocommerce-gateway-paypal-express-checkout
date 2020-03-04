@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -42,7 +42,7 @@ class WC_Gateway_PPEC_IPS_Handler {
 	 *
 	 * This is store URL that will be redirected from middleware.
 	 *
-	 * @param string $env Environment
+	 * @param string $env Environment.
 	 *
 	 * @return string Redirect URL
 	 */
@@ -63,7 +63,7 @@ class WC_Gateway_PPEC_IPS_Handler {
 	/**
 	 * Get login URL to WC middleware.
 	 *
-	 * @param string $env Environment
+	 * @param string $env Environment.
 	 *
 	 * @return string Signup URL
 	 */
@@ -79,7 +79,7 @@ class WC_Gateway_PPEC_IPS_Handler {
 	/**
 	 * Get signup URL to WC middleware.
 	 *
-	 * @param string $env Environment
+	 * @param string $env Environment.
 	 *
 	 * @return string Signup URL
 	 */
@@ -105,6 +105,7 @@ class WC_Gateway_PPEC_IPS_Handler {
 	/**
 	 * Redirect with messages.
 	 *
+	 * @param string|array $error_msg Error message.
 	 * @return void
 	 */
 	protected function _redirect_with_messages( $error_msg ) {
@@ -186,7 +187,7 @@ class WC_Gateway_PPEC_IPS_Handler {
 			wc_gateway_ppec_log( sprintf( '%s: returned back from IPS flow: %s', __METHOD__, print_r( $error_msgs, true ) ) );
 		}
 
-		// Save credentials to settings API
+		// Save credentials to settings API.
 		$settings_array = (array) get_option( 'woocommerce_ppec_paypal_settings', array() );
 
 		if ( 'live' === $env ) {

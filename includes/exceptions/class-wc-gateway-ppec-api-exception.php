@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -34,7 +34,7 @@ class PayPal_API_Exception extends Exception {
 	 * errors in the response, then places those errors into the $errors property.
 	 * It also captures correlation ID and places that in the $correlation_id property.
 	 *
-	 * @param array $response Response from PayPal API
+	 * @param array $response Response from PayPal API.
 	 */
 	public function __construct( $response ) {
 		parent::__construct( __( 'An error occurred while calling the PayPal API.', 'woocommerce-gateway-paypal-express-checkout' ) );

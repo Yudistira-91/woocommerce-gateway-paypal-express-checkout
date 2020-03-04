@@ -1,12 +1,17 @@
 <?php
 /**
  * Plugin bootstrapper.
+ *
+ * @package WooCommerce_PPEC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_Admin_Handler
+ */
 class WC_Gateway_PPEC_Admin_Handler {
 
 	/**
@@ -17,7 +22,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 		add_action( 'admin_notices', array( $this, 'show_decimal_warning' ) );
 
 		// defer this until for next release.
-		// add_filter( 'woocommerce_get_sections_checkout', array( $this, 'filter_checkout_sections' ) );
+		// add_filter( 'woocommerce_get_sections_checkout', array( $this, 'filter_checkout_sections' ) );.
 
 		add_action( 'woocommerce_order_status_processing', array( $this, 'capture_payment' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'capture_payment' ) );
@@ -34,6 +39,12 @@ class WC_Gateway_PPEC_Admin_Handler {
 		add_action( 'admin_notices', array( $this, 'show_wc_version_warning' ) );
 	}
 
+	/**
+	 * Adds a "Capture Charge" to the order actions.
+	 *
+	 * @param array $actions Order actions.
+	 * @return array
+	 */
 	public function add_capture_charge_order_action( $actions ) {
 		if ( ! isset( $_REQUEST['post'] ) ) {
 			return $actions;
@@ -50,7 +61,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 		$payment_method = $old_wc ? $order->payment_method : $order->get_payment_method();
 		$paypal_status  = $old_wc ? get_post_meta( $order_id, '_paypal_status', true ) : $order->get_meta( '_paypal_status', true );
 
-		// bail if the order wasn't paid for with this gateway
+		// bail if the order wasn't paid for with this gateway.
 		if ( 'ppec_paypal' !== $payment_method || 'pending' !== $paypal_status ) {
 			return $actions;
 		}
@@ -95,7 +106,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	 * Prevent PPEC Credit showing up in the admin, because it shares its settings
 	 * with the PayPal Checkout class.
 	 *
-	 * @param array $sections List of sections in checkout
+	 * @param array $sections List of sections in checkout.
 	 *
 	 * @return array Sections in checkout
 	 */
@@ -112,11 +123,11 @@ class WC_Gateway_PPEC_Admin_Handler {
 		$current_section = isset( $_GET['section'] ) ? $_GET['section'] : '';
 
 		// If the current section is a paypal section, remove the card section,
-		// otherwise, remove the paypal section
+		// otherwise, remove the paypal section.
 		$sections_to_remove = in_array( $current_section, $paypal_sections ) ? $card_sections : $paypal_sections;
 
 		// And, let's also remove simplify commerce from the sections if it is not enabled and it is not the
-		// current section. (Note: The option will be empty if it has never been enabled)
+		// current section. (Note: The option will be empty if it has never been enabled).
 
 		$simplify_commerce_options = get_option( 'woocommerce_simplify_commerce_settings', array() );
 		if ( empty( $simplify_commerce_options ) || ( 'no' === $simplify_commerce_options['enabled'] ) ) {
@@ -136,6 +147,12 @@ class WC_Gateway_PPEC_Admin_Handler {
 
 	}
 
+	/**
+	 * Capture payment for an order.
+	 *
+	 * @param int|WC_Order $order An order object.
+	 * @return bool
+	 */
 	public function maybe_capture_charge( $order ) {
 		if ( ! is_object( $order ) ) {
 			$order = wc_get_order( $order );
@@ -150,7 +167,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	/**
 	 * Capture payment when the order is changed from on-hold to complete or processing
 	 *
-	 * @param int $order_id
+	 * @param int $order_id Order ID.
 	 */
 	public function capture_payment( $order_id ) {
 		$order  = wc_get_order( $order_id );
@@ -191,7 +208,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	/**
 	 * Checks to see if the transaction can be captured
 	 *
-	 * @param array $trans_details
+	 * @param array $trans_details Transaction details.
 	 */
 	public function is_authorized_only( $trans_details = array() ) {
 		if ( ! is_wp_error( $trans_details ) && ! empty( $trans_details ) ) {
@@ -206,7 +223,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	/**
 	 * Cancel authorization (if one is present)
 	 *
-	 * @param  int $order_id
+	 * @param int $order_id Order ID.
 	 */
 	public function cancel_authorization( $order_id ) {
 		$order = wc_get_order( $order_id );
@@ -237,7 +254,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	 * Get admin URL for this gateway setting.
 	 *
 	 * @deprecated
-	 *
+	 * @param string $gateway_class Gateway class.
 	 * @return string URL
 	 */
 	public function gateway_admin_url( $gateway_class ) {
@@ -313,7 +330,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 	 *
 	 * @since 1.6.6
 	 *
-	 * @param int $order_id
+	 * @param int $order_id Order ID.
 	 */
 	public function display_order_fee_and_payout( $order_id ) {
 		$order = wc_get_order( $order_id );

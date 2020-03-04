@@ -13,6 +13,8 @@
  * Domain Path: /languages
  * WC tested up to: 3.9
  * WC requires at least: 2.6
+ *
+ * @package WooCommerce_PPEC
  */
 
 /**
@@ -25,7 +27,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 define( 'WC_GATEWAY_PPEC_VERSION', '1.6.20' );

@@ -1,10 +1,14 @@
 <?php
 /**
- * TODO: Move each class into its own file and group them under one dir, payment-details.
+ * Payment details.
+ *
+ * @package WooCommerce_PPEC
  */
 
+// TODO: Move each class into its own file and group them under one dir, payment-details.
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class PayPal_Payment_Details {
@@ -34,7 +38,7 @@ class PayPal_Payment_Details {
 				$key = $map[ $index ];
 				$this->$key = $value;
 			}
-			// Figure out the highest payment number
+			// Figure out the highest payment number.
 			if ( preg_match( '/^PAYMENTINFO_(\d)_(TRANSACTIONID|EBAYITEMAUCTIONTXNID|PARENTTRANSACTIONID|RECEIPTID|TRANSACTIONTYPE|PAYMENTTYPE|EXPECTEDECHECKCLEARDATE|ORDERTIME|AMT|CURRENCYCODE|FEEAMT|SETTLEAMT|TAXAMT|EXCHANGERATE|PAYMENTSTATUS|PENDINGREASON|REASONCODE|HOLDDECISION|SHIPPINGMETHOD|PROTECTIONELIGIBILITY|PROTECTIONELIGIBILITYTYPE|RECEIPTREFERENCENUMBER|SHIPPINGAMT|HANDLINGAMT|PAYMENTREQUESTID|INSTRUMENTCATEGORY|INSTRUMENTID|OFFERCODE|OFFERTRACKINGID|SHORTMESSAGE|LONGMESSAGE|ERRORCODE|SEVERITYCODE|ACK|SELLERPAYPALACCOUNTID|SECUREMERCHANTACCOUNTID|SELLERID|SELLERUSERNAME|SELLERREGISTRATIONDATE)$/', $index, $matches ) ) {
 				if ( $matches[1] > $max_payment_num ) {
 					$max_payment_num = $matches[1];
@@ -359,8 +363,14 @@ class PayPal_Payment_Payment_Instrument_Details {
 
 	public $instrument_id                = false;
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the doECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array  $doECResponse EC response.
+	 * @param string $bucketNum    Bucket num.
+	 * @return bool
+	 */
 	public function loadFromDoECResponse( $doECResponse, $bucketNum ) {
 		$map = array(
 			'INSTRUMENTCATEGORY' => 'instrument_category',

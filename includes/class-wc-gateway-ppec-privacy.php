@@ -3,6 +3,9 @@ if ( ! class_exists( 'WC_Abstract_Privacy' ) ) {
 	return;
 }
 
+/**
+ * WC_Gateway_PPEC_Privacy
+ */
 class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Constructor
@@ -21,10 +24,10 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Returns a list of orders that are using one of PPEC's payment methods.
 	 *
-	 * @param string $email_address
-	 * @param int    $page
+	 * @param string $email_address User's e-mail address.
+	 * @param int    $page          Page number for pagination.
 	 *
-	 * @return array WP_Post
+	 * @return WP_Post[]
 	 */
 	protected function get_ppec_orders( $email_address, $page ) {
 		$user = get_user_by( 'email', $email_address ); // Check if user has an ID in the DB to load stored personal data.
@@ -190,7 +193,7 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 			$messages        = array_merge( $messages, $msgs );
 		}
 
-		// Tell core if we have more orders to work on still
+		// Tell core if we have more orders to work on still.
 		$done = count( $orders ) < 10;
 
 		return array(
@@ -204,7 +207,7 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Handle eraser of data tied to Subscriptions
 	 *
-	 * @param WC_Order $order
+	 * @param WC_Order $order An order object.
 	 * @return array
 	 */
 	protected function maybe_handle_subscription( $order ) {
@@ -248,7 +251,7 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Handle eraser of data tied to Orders
 	 *
-	 * @param WC_Order $order
+	 * @param WC_Order $order An order object.
 	 * @return array
 	 */
 	protected function maybe_handle_order( $order ) {

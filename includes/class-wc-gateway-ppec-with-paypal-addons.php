@@ -1,11 +1,17 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_With_PayPal_Addons
+ */
 class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		parent::__construct();
 
@@ -55,7 +61,7 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return bool Returns true if order is part of subscription
 	 */
@@ -93,7 +99,7 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return array
 	 */
@@ -115,7 +121,7 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return array
 	 */
@@ -148,8 +154,8 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param float        $amount Subscription amount
-	 * @param int|WC_Order $order  Order ID or order object
+	 * @param float        $amount Subscription amount.
+	 * @param int|WC_Order $order  Order ID or order object.
 	 */
 	public function scheduled_subscription_payment( $amount, $order ) {
 		$old_wc               = version_compare( WC_VERSION, '3.0', '<' );
@@ -186,9 +192,9 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 * scheduled subscription.
 	 *
 	 * @since 1.2.0
-	 *
-	 * @param WC_Order $order    Order object
-	 * @param array    $response Response from DoReferenceTransaction
+	 * @throws Exception In case of failure.
+	 * @param WC_Order $order    Order object.
+	 * @param array    $response Response from DoReferenceTransaction.
 	 */
 	protected function _process_reference_transaction_response( $order, $response ) {
 		$client = wc_gateway_ppec()->client;
@@ -234,10 +240,10 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 	 * @since 1.2.0
 	 *
 	 * @param WC_Subscription $subscription  The subscription for which the failing
-	 *                                       payment method relates
+	 *                                       payment method relates.
 	 * @param WC_Order        $renewal_order The order which recorded the successful
 	 *                                       payment (to make up for the failed
-	 *                                       automatic payment)
+	 *                                       automatic payment).
 	 */
 	public function update_failing_payment_method( $subscription, $renewal_order ) {
 		update_post_meta( is_callable( array( $subscription, 'get_id' ) ) ? $subscription->get_id() : $subscription->id, '_ppec_billing_agreement_id', $renewal_order->ppec_billing_agreement_id );

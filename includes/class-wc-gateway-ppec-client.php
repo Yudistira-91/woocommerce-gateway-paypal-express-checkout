@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -34,8 +34,8 @@ class WC_Gateway_PPEC_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed  $credential  Client's credential
-	 * @param string $environment Client's environment
+	 * @param mixed  $credential  Client's credential.
+	 * @param string $environment Client's environment.
 	 */
 	public function __construct( $credential, $environment = 'live' ) {
 		$this->_environment = $environment;
@@ -48,7 +48,7 @@ class WC_Gateway_PPEC_Client {
 	/**
 	 * Set credential for the client.
 	 *
-	 * @param WC_Gateway_PPEC_Client_Credential $credential Client's credential
+	 * @param WC_Gateway_PPEC_Client_Credential $credential Client's credential.
 	 */
 	public function set_credential( WC_Gateway_PPEC_Client_Credential $credential ) {
 		$this->_credential = $credential;
@@ -77,7 +77,7 @@ class WC_Gateway_PPEC_Client {
 	/**
 	 * Set environment for the client.
 	 *
-	 * @param string $environment Environment. Either 'live' or 'sandbox'
+	 * @param string $environment Environment. Either 'live' or 'sandbox'.
 	 */
 	public function set_environment( $environment ) {
 		if ( ! in_array( $environment, array( 'live', 'sandbox' ) ) ) {
@@ -107,7 +107,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/NVPAPIOverview/#creating-an-nvp-request
 	 *
-	 * @param  array $params NVP request parameters
+	 * @param  array $params NVP request parameters.
 	 * @return array         NVP response
 	 */
 	protected function _request( array $params ) {
@@ -157,7 +157,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @throws \Exception
+	 * @throws \Exception In case of failure (no valid credentials or environment).
 	 */
 	protected function _validate_request() {
 		// Make sure $_credential and $_environment have been configured.
@@ -179,9 +179,9 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @throws \Exception
+	 * @throws \Exception In case of failure.
 	 *
-	 * @param WP_Error|array Response from remote API
+	 * @param WP_Error|array $response Response from remote API.
 	 *
 	 * @return array
 	 */
@@ -209,8 +209,8 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/merchant/SetExpressCheckout_API_Operation_NVP/
 	 *
-	 * @param  array $params NVP params
-	 * @return array         NVP response
+	 * @param  array $params NVP params.
+	 * @return array NVP response.
 	 */
 	public function set_express_checkout( array $params ) {
 		$params['METHOD']  = 'SetExpressCheckout';
@@ -377,8 +377,8 @@ class WC_Gateway_PPEC_Client {
 	 * The URL to return when canceling the express checkout.
 	 *
 	 * @since 1.2.0
-	 *
-	 * @return string Cancel URL
+	 * @param array $context_args Request context.
+	 * @return string Cancel URL.
 	 */
 	protected function _get_cancel_url( $context_args ) {
 		$url = add_query_arg( 'woo-paypal-cancel', 'true', wc_get_cart_url() );
@@ -409,9 +409,9 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param float $amount Item's amount
+	 * @param float $amount Item's amount.
 	 *
-	 * @return array Line item
+	 * @return array Line item.
 	 */
 	protected function _get_extra_offset_line_item( $amount ) {
 		$settings = wc_gateway_ppec()->settings;
@@ -430,9 +430,9 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param float $amount Item's amount
+	 * @param float $amount Item's amount.
 	 *
-	 * @return array Line item
+	 * @return array Line item.
 	 */
 	protected function _get_extra_discount_line_item( $amount ) {
 		$settings = wc_gateway_ppec()->settings;
@@ -550,13 +550,16 @@ class WC_Gateway_PPEC_Client {
 	}
 
 	/**
-	 * Get details from populated price array
+	 * Get details from populated price array.
 	 *
 	 * @since 1.4.1
 	 *
-	 * @param array $details Prices
+	 * @param array $details       Prices.
+	 * @param float $discounts     Discounts.
+	 * @param float $rounded_total Rounded total.
+	 * @param float $total         Total.
 	 *
-	 * @return array Details
+	 * @return array Details.
 	 */
 	protected function get_details( $details, $discounts, $rounded_total, $total ) {
 		$settings = wc_gateway_ppec()->settings;
@@ -599,16 +602,16 @@ class WC_Gateway_PPEC_Client {
 			// Omit line items altogether.
 			unset( $details['items'] );
 		} else if ( $discounts > 0 && $discounts < $details['total_item_amount'] && ! empty( $details['items'] ) ) {
-			// Else if there is discount, add them to the line-items
+			// Else if there is discount, add them to the line-items.
 			$details['items'][] = $this->_get_extra_discount_line_item( $discounts );
 		}
 
 		$details['ship_discount_amount'] = 0;
 
-		// AMT
+		// AMT.
 		$details['order_total']       = round( $details['order_total'] - $discounts, $decimals );
 
-		// ITEMAMT
+		// ITEMAMT.
 		$details['total_item_amount'] = round( $details['total_item_amount'] - $discounts, $decimals );
 
 		// If the totals don't line up, adjust the tax to make it work (it's
@@ -617,7 +620,7 @@ class WC_Gateway_PPEC_Client {
 		$discounted_total = $details['order_total'];
 
 		if ( $wc_order_total != $discounted_total ) {
-			// tax cannot be negative
+			// tax cannot be negative.
 			if ( $discounted_total < $wc_order_total ) {
 				$details['order_tax'] += $wc_order_total - $discounted_total;
 				$details['order_tax'] = round( $details['order_tax'], $decimals );
@@ -659,6 +662,12 @@ class WC_Gateway_PPEC_Client {
 		return apply_filters( 'woocommerce_paypal_express_checkout_get_details', $details );
 	}
 
+	/**
+	 * Returns the sum of all order fees.
+	 *
+	 * @param WC_Order $order An order object.
+	 * @return float
+	 */
 	protected function _get_total_order_fees( $order ) {
 		$total = 0;
 		$fees = $order->get_fees();
@@ -676,9 +685,9 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
-	 * @return array Order details
+	 * @return array Order details.
 	 */
 	protected function _get_details_from_order( $order_id ) {
 		$order    = wc_get_order( $order_id );
@@ -737,7 +746,7 @@ class WC_Gateway_PPEC_Client {
 		// In case merchant only expects domestic shipping and hides shipping
 		// country, fallback to base country.
 		//
-		// @see https://github.com/woothemes/woocommerce-gateway-paypal-express-checkout/issues/139
+		// @see https://github.com/woothemes/woocommerce-gateway-paypal-express-checkout/issues/139.
 		if ( empty( $shipping_country ) ) {
 			$shipping_country = WC()->countries->get_base_country();
 		}
@@ -805,7 +814,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param int|WC_Order $order Order ID or order object
+	 * @param int|WC_Order $order Order ID or order object.
 	 *
 	 * @return array Line items
 	 */
@@ -842,9 +851,7 @@ class WC_Gateway_PPEC_Client {
 	 * Get rounded total of a given order.
 	 *
 	 * @since 1.2.0
-	 *
-	 * @param int|WC_Order Order ID or order object
-	 *
+	 * @param int|WC_Order $order Order ID or order object.
 	 * @return float
 	 */
 	protected function _get_rounded_total_in_order( $order ) {
@@ -871,7 +878,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/merchant/GetExpressCheckoutDetails_API_Operation_NVP/
 	 *
-	 * @param  string $token Token from SetExpressCheckout response
+	 * @param  string $token Token from SetExpressCheckout response.
 	 * @return array         NVP response
 	 */
 	public function get_express_checkout_details( $token ) {
@@ -891,7 +898,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/merchant/DoExpressCheckoutPayment_API_Operation_NVP/
 	 *
-	 * @param  array $params NVP params
+	 * @param  array $params NVP params.
 	 * @return array         NVP response
 	 */
 	public function do_express_checkout_payment( array $params ) {
@@ -907,7 +914,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $args Args
+	 * @param array $args Args.
 	 *
 	 * @return array Params for DoExpressCheckoutPayment call
 	 */
@@ -979,7 +986,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $token Token from SetExpressCheckout response
+	 * @param string $token Token from SetExpressCheckout response.
 	 */
 	public function create_billing_agreement( $token ) {
 		$params = array(
@@ -998,7 +1005,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $billing_agreement_id Billing agreement ID
+	 * @param string $billing_agreement_id Billing agreement ID.
 	 */
 	public function update_billing_agreement( $billing_agreement_id ) {
 		$params = array(
@@ -1016,7 +1023,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param  array $params NVP params
+	 * @param  array $params NVP params.
 	 * @return array         NVP response
 	 */
 	public function do_reference_transaction( array $params ) {
@@ -1032,7 +1039,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $args Args
+	 * @param array $args Args.
 	 *
 	 * @return array Params for DoReferenceTransaction call
 	 */
@@ -1101,6 +1108,12 @@ class WC_Gateway_PPEC_Client {
 		return $params;
 	}
 
+	/**
+	 * Executes a "DoCapture" request.
+	 *
+	 * @param array $params Request parameters.
+	 * @return array NVP response.
+	 */
 	public function do_express_checkout_capture( $params ) {
 		$params['METHOD']  = 'DoCapture';
 		$params['VERSION'] = self::API_VERSION;
@@ -1108,6 +1121,12 @@ class WC_Gateway_PPEC_Client {
 		return $this->_request( $params );
 	}
 
+	/**
+	 * Executes a "DoVoid" request.
+	 *
+	 * @param array $params Request parameters.
+	 * @return array NVP response.
+	 */
 	public function do_express_checkout_void( $params ) {
 		$params['METHOD']  = 'DoVoid';
 		$params['VERSION'] = self::API_VERSION;
@@ -1115,6 +1134,12 @@ class WC_Gateway_PPEC_Client {
 		return $this->_request( $params );
 	}
 
+	/**
+	 * Executes a "GetTransactionDetails" request.
+	 *
+	 * @param array $params Request parameters.
+	 * @return array NVP response.
+	 */
 	public function get_transaction_details( $params ) {
 		$params['METHOD']  = 'GetTransactionDetails';
 		$params['VERSION'] = self::API_VERSION;
@@ -1142,7 +1167,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/merchant/RefundTransaction_API_Operation_NVP/
 	 *
-	 * @param  array $params NVP params
+	 * @param  array $params NVP params.
 	 * @return array         NVP response
 	 */
 	public function refund_transaction( $params ) {
@@ -1152,6 +1177,14 @@ class WC_Gateway_PPEC_Client {
 		return $this->_request( $params );
 	}
 
+	/**
+	 * Performs a request to test API credentials.
+	 *
+	 * @param WC_Gateway_PPEC_Client_Credential $credentials API credentials to test.
+	 * @param string                            $environment Environment. Either 'sandbox' or 'live'.
+	 * @return bool|string
+	 * @throws PayPal_API_Exception In case of failure.
+	 */
 	public function test_api_credentials( $credentials, $environment = 'sandbox' ) {
 		$this->set_credential( $credentials );
 		$this->set_environment( $environment );
@@ -1182,10 +1215,17 @@ class WC_Gateway_PPEC_Client {
 		return $result['PAL'];
 	}
 
-	// Probe to see whether the merchant has the billing address feature enabled.  We do this
-	// by running a SetExpressCheckout call with REQBILLINGADDRESS set to 1; if the merchant has
-	// this feature enabled, the call will complete successfully; if they do not, the call will
-	// fail with error code 11601.
+	/**
+	 * Probe to see whether the merchant has the billing address feature enabled.
+	 * We do this by running a SetExpressCheckout call with REQBILLINGADDRESS set to 1; if the merchant has
+	 * this feature enabled, the call will complete successfully; if they do not, the call will
+	 * fail with error code 11601.
+	 *
+	 * @param WC_Gateway_PPEC_Client_Credential $credentials API credentials to test.
+	 * @param string                            $environment Environment. Either 'sandbox' or 'live'.
+	 * @return bool|string
+	 * @throws PayPal_API_Exception In case of failure.
+	 */
 	public function test_for_billing_address_enabled( $credentials, $environment = 'sandbox' ) {
 		$this->set_credential( $credentials );
 		$this->set_environment( $environment );
@@ -1223,7 +1263,7 @@ class WC_Gateway_PPEC_Client {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $response NVP response
+	 * @param array $response NVP response.
 	 *
 	 * @return bool Returns true if response indicates a successful operation
 	 */

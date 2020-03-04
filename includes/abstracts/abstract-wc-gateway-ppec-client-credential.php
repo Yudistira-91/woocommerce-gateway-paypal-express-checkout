@@ -1,9 +1,12 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_Client_Credential
+ */
 abstract class WC_Gateway_PPEC_Client_Credential {
 
 	/**
@@ -87,9 +90,7 @@ abstract class WC_Gateway_PPEC_Client_Credential {
 	 * Allow certificate-based credential to configure cURL, especially
 	 * to set CURLOPT_SSLCERT and CURLOPT_SSLCERTPASSWD.
 	 *
-	 * @throws Exception
-	 *
-	 * @param resource &$handle The cURL handle returned by curl_init().
+	 * @param resource $handle  The cURL handle returned by curl_init().
 	 * @param array    $r       The HTTP request arguments.
 	 * @param string   $url     The request URL.
 	 *

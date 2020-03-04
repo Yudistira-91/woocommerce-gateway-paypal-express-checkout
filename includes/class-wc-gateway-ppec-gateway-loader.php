@@ -1,12 +1,17 @@
 <?php
 /**
  * Plugin bootstrapper.
+ *
+ * @package WooCommerce_PPEC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WC_Gateway_PPEC_Gateway_Loader.
+ */
 class WC_Gateway_PPEC_Gateway_Loader {
 
 	/**

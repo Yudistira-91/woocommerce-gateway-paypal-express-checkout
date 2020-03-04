@@ -1,10 +1,16 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_With_PayPal
+ */
 class WC_Gateway_PPEC_With_PayPal extends WC_Gateway_PPEC {
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		$this->id   = 'ppec_paypal';
 		$this->icon = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png';

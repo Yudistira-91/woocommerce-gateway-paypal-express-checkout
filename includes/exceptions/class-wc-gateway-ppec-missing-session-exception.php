@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -12,7 +12,7 @@ class PayPal_Missing_Session_Exception extends Exception {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $message Exception message
+	 * @param string $message Exception message.
 	 */
 	public function __construct( $message = '' ) {
 		if ( empty( $message ) ) {

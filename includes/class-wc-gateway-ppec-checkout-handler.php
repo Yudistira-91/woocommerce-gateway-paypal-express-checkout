@@ -1,10 +1,12 @@
 <?php
 /**
  * Cart handler.
+ *
+ * @package WooCommerce_PPEC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 $includes_path = wc_gateway_ppec()->includes_path;
@@ -22,6 +24,9 @@ require_once( $includes_path . 'exceptions/class-wc-gateway-ppec-missing-session
 require_once( $includes_path . 'class-wc-gateway-ppec-payment-details.php' );
 require_once( $includes_path . 'class-wc-gateway-ppec-address.php' );
 
+/**
+ * WC_Gateway_PPEC_Checkout_Handler
+ */
 class WC_Gateway_PPEC_Checkout_Handler {
 
 	/**
@@ -33,6 +38,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 */
 	protected $_checkout_details;
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 		add_filter( 'the_title', array( $this, 'endpoint_page_titles' ) );
@@ -70,9 +78,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
-	 * Handle endpoint page title
+	 * Handle endpoint page title.
 	 *
-	 * @param  string $title
+	 * @param  string $title Endpoint's title.
 	 * @return string
 	 */
 	public function endpoint_page_titles( $title ) {
@@ -90,7 +98,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * Hooked to the woocommerce_checkout_init action
 	 *
-	 * @param WC_Checkout $checkout
+	 * @param WC_Checkout $checkout WooCommerce checkout.
 	 */
 	function checkout_init( $checkout ) {
 		if ( ! $this->has_active_session() ) {
@@ -98,12 +106,12 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		}
 
 		// Since we've removed the billing and shipping checkout fields, we should also remove the
-		// billing and shipping portion of the checkout form
+		// billing and shipping portion of the checkout form.
 		remove_action( 'woocommerce_checkout_billing', array( $checkout, 'checkout_form_billing' ) );
 		remove_action( 'woocommerce_checkout_shipping', array( $checkout, 'checkout_form_shipping' ) );
 
 		// Lastly, let's add back in 1) displaying customer details from PayPal, 2) allow for
-		// account registration and 3) shipping details from PayPal
+		// account registration and 3) shipping details from PayPal.
 		add_action( 'woocommerce_checkout_billing', array( $this, 'paypal_billing_details' ) );
 		add_action( 'woocommerce_checkout_billing', array( $this, 'account_registration' ) );
 		add_action( 'woocommerce_checkout_shipping', array( $this, 'paypal_shipping_details' ) );
@@ -116,7 +124,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.2.1
 	 * @since 1.5.4 Check to make sure PPEC is even enable before continuing.
-	 * @param $fields array
+	 * @param array $fields Address fields array.
 	 *
 	 * @return array
 	 */
@@ -138,7 +146,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			}
 		}
 
-		// Regardless of shipping, PP doesn't have the county required (e.g. using Ireland without a county is acceptable)
+		// Regardless of shipping, PP doesn't have the county required (e.g. using Ireland without a county is acceptable).
 		if ( array_key_exists( 'state', $fields ) ) {
 			$fields['state']['required'] = false;
 		}
@@ -157,7 +165,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.2.0
 	 * @since 1.5.4 Check to make sure PPEC is even enable before continuing.
-	 * @param $billing_fields array
+	 * @param array $billing_fields Billing fields array.
 	 *
 	 * @return array
 	 */
@@ -177,9 +185,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 	/**
 	 * When an active session is present, gets (from PayPal) the buyer details
-	 * and replaces the appropriate checkout fields in $_POST
+	 * and replaces the appropriate checkout fields in $_POST.
 	 *
-	 * Hooked to woocommerce_checkout_process
+	 * Hooked to woocommerce_checkout_process.
 	 *
 	 * @since 1.2.0
 	 */
@@ -188,12 +196,12 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			return;
 		}
 
-		// Make sure the selected payment method is ppec_paypal
+		// Make sure the selected payment method is ppec_paypal.
 		if ( ! isset( $_POST['payment_method'] ) || ( 'ppec_paypal' !== $_POST['payment_method'] ) ) {
 			return;
 		}
 
-		// Get the buyer details from PayPal
+		// Get the buyer details from PayPal.
 		try {
 			$session          = WC()->session->get( 'paypal' );
 			$token            = isset( $_GET['token'] ) ? $_GET['token'] : $session->token;
@@ -206,9 +214,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$shipping_details = $this->get_mapped_shipping_address( $checkout_details );
 		$billing_details  = $this->get_mapped_billing_address( $checkout_details );
 
-		// If the billing address is empty, copy address from shipping
+		// If the billing address is empty, copy address from shipping.
 		if ( empty( $billing_details['address_1'] ) ) {
-			// Set flag so that WC copies billing to shipping
+			// Set flag so that WC copies billing to shipping.
 			$_POST['ship_to_different_address'] = 0;
 
 			$copyable_keys = array( 'first_name', 'last_name', 'address_1', 'address_2', 'city', 'state', 'postcode', 'country' );
@@ -218,7 +226,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				}
 			}
 		} else {
-			// Shipping may be different from billing, so set flag to not copy address from billing
+			// Shipping may be different from billing, so set flag to not copy address from billing.
 			$_POST['ship_to_different_address'] = 1;
 		}
 
@@ -348,17 +356,20 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated 1.2.0
+	 * @param mixed $posted_checkout Deprecated arg.
 	 */
 	public function after_checkout_validation( $posted_checkout ) {
 		_deprecated_function( 'after_checkout_validation', '1.2.0', '' );
 	}
 
 	/**
-	 * Map PayPal billing address to WC shipping address
-	 * NOTE: Not all PayPal_Checkout_Payer_Details objects include a billing address
+	 * Map PayPal billing address to WC shipping address.
+	 * NOTE: Not all PayPal_Checkout_Payer_Details objects include a billing address.
 	 *
-	 * @param  object $checkout_details
+	 * @param  object $checkout_details Checkout details.
 	 * @return array
 	 */
 	public function get_mapped_billing_address( $checkout_details ) {
@@ -392,7 +403,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	/**
 	 * Map PayPal shipping address to WC shipping address.
 	 *
-	 * @param  object $checkout_details Checkout details
+	 * @param  object $checkout_details Checkout details.
 	 * @return array
 	 */
 	public function get_mapped_shipping_address( $checkout_details ) {
@@ -457,11 +468,11 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		WC()->session->set( 'paypal', $session );
 
 		try {
-			// If commit was true, take payment right now
+			// If commit was true, take payment right now.
 			if ( 'order' === $session->source && $session->order_id ) {
 				$checkout_details = $this->get_checkout_details( $token );
 
-				// Get order
+				// Get order.
 				$order = wc_get_order( $session->order_id );
 
 				// Maybe create billing agreement.
@@ -472,10 +483,10 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				// Complete the payment now.
 				$this->do_payment( $order, $session->token, $session->payer_id );
 
-				// Clear Cart
+				// Clear Cart.
 				WC()->cart->empty_cart();
 
-				// Redirect
+				// Redirect.
 				wp_redirect( $order->get_checkout_order_received_url() );
 				exit;
 			}
@@ -501,7 +512,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.6.2.
 	 *
-	 * @param string $token Token
+	 * @param string $token Token.
 	 *
 	 * @return void
 	 */
@@ -544,7 +555,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * @since 1.0.0
 	 * @version 1.2.1
 	 *
-	 * @param array $gateways Available gateways
+	 * @param array $gateways Available gateways.
 	 *
 	 * @return array Available gateways
 	 */
@@ -563,7 +574,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		}
 
 		// If the cart total is zero (e.g. because of a coupon), don't allow this gateway.
-		// We do this only if we're on the checkout page (is_checkout), but not on the order-pay page (is_checkout_pay_page)
+		// We do this only if we're on the checkout page (is_checkout), but not on the order-pay page (is_checkout_pay_page).
 		if ( is_cart() || ( is_checkout() && ! is_checkout_pay_page() ) ) {
 			if ( isset( $gateways['ppec_paypal'] ) && ( 0 >= WC()->cart->total ) ) {
 				unset( $gateways['ppec_paypal'] );
@@ -635,7 +646,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $token Token
+	 * @param string $token Token.
 	 *
 	 * @return bool
 	 */
@@ -661,6 +672,8 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated
 	 */
 	public function get_token_from_session() {
@@ -668,13 +681,18 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated
+	 * @param mixed $address Deprecated.
 	 */
 	public function setShippingAddress( $address ) {
 		_deprecated_function( __METHOD__, '1.2.0', '' );
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated
 	 */
 	public function getSetExpressCheckoutParameters() {
@@ -684,7 +702,11 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated
+	 * @param mixed $token    Deprecated.
+	 * @param mixed $payer_id Deprecated.
 	 */
 	public function getDoExpressCheckoutParameters( $token, $payer_id ) {
 		// No replacement because WC_Gateway_PPEC_Client::get_do_express_checkout_params
@@ -693,7 +715,10 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated method.
+	 *
 	 * @deprecated
+	 * @param mixed $response Deprecated.
 	 */
 	protected function is_success( $response ) {
 		_deprecated_function( __METHOD__, '1.2.0', 'WC_Gateway_PPEC_Client::response_has_success_status' );
@@ -708,7 +733,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * @param array $context_args Context parameters for checkout.
 	 * @param array $session_data_args Session parameters (token pre-populated).
 	 *
-	 * @throws PayPal_API_Exception
+	 * @throws PayPal_API_Exception In case of failure.
 	 * @return string Redirect URL.
 	 */
 	protected function start_checkout( $context_args, $session_data_args ) {
@@ -733,6 +758,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	/**
 	 * Handler when buyer is checking out prior to order creation.
 	 *
+	 * @param bool $skip_checkout 'skip_checkout' value.
 	 * @return string Redirect URL.
 	 */
 	public function start_checkout_from_cart( $skip_checkout = true ) {
@@ -799,7 +825,10 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
+	 * Deprecated.
+	 *
 	 * @deprecated
+	 * @param mixed $token Deprecated.
 	 */
 	public function getCheckoutDetails( $token = false ) {
 		_deprecated_function( __METHOD__, '1.2.0', 'WC_Gateway_PPEC_Checkout_Handler::get_checkout_details' );
@@ -811,9 +840,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @throws \Exception
+	 * @throws PayPal_API_Exception In case of failure.
 	 *
-	 * @param bool|string $token Express Checkout token
+	 * @param bool|string $token Express Checkout token.
 	 */
 	public function get_checkout_details( $token = false ) {
 		if ( is_a( $this->_checkout_details, 'PayPal_Checkout_Details' ) ) {
@@ -844,10 +873,10 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @throws \Exception
+	 * @throws PayPal_API_Exception In case of failure.
 	 *
-	 * @param WC_Order                $order            Order object
-	 * @param PayPal_Checkout_Details $checkout_details Checkout details
+	 * @param WC_Order                $order            Order object.
+	 * @param PayPal_Checkout_Details $checkout_details Checkout details.
 	 */
 	public function create_billing_agreement( $order, $checkout_details ) {
 		if ( 1 !== intval( $checkout_details->billing_agreement_accepted ) ) {
@@ -885,6 +914,12 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 	/**
 	 * Complete a payment that has been authorized via PPEC.
+	 *
+	 * @throws PayPal_API_Exception             In case of failure.
+	 * @throws PayPal_Missing_Session_Exception If session is not correctly set.
+	 * @param WC_Order $order    Order object.
+	 * @param mixed    $token    Token.
+	 * @param mixed    $payer_id Payer ID.
 	 */
 	public function do_payment( $order, $token, $payer_id ) {
 		$settings     = wc_gateway_ppec()->settings;
@@ -907,6 +942,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 		$response = $client->do_express_checkout_payment( $params );
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		if ( $client->response_has_success_status( $response ) ) {
 			$payment_details = new PayPal_Payment_Details();
 			$payment_details->loadFromDoECResponse( $response );
@@ -944,27 +980,31 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				$order->update_meta_data( '_woo_pp_txnData', $txnData );
 			}
 
-			// Payment was taken so clear session
+			// Payment was taken so clear session.
 			$this->maybe_clear_session_data();
 
-			// Handle order
+			// Handle order.
 			$this->handle_payment_response( $order, $payment_details->payments[0] );
 		} else {
 			throw new PayPal_API_Exception( $response );
 		}
+		// phpcs:enable
 	}
 
 	/**
-	 * Handle result of do_payment
+	 * Handle result of do_payment.
+	 *
+	 * @param WC_Order                       $order   Order object.
+	 * @param PayPal_Payment_Payment_Details $payment Payment details.
 	 */
 	public function handle_payment_response( $order, $payment ) {
-		// Store meta data to order
+		// Store meta data to order.
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 
 		update_post_meta( $old_wc ? $order->id : $order->get_id(), '_paypal_status', strtolower( $payment->payment_status ) );
 		update_post_meta( $old_wc ? $order->id : $order->get_id(), '_transaction_id', $payment->transaction_id );
 
-		// Handle $payment response
+		// Handle $payment response.
 		if ( 'completed' === strtolower( $payment->payment_status ) ) {
 			$order->payment_complete( $payment->transaction_id );
 			if ( isset( $payment->fee_amount ) ) {
@@ -992,7 +1032,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * after the user is authenticated by PayPal.
 	 *
 	 * @since 1.9.13 Introduced
-	 * @param array $packages
+	 * @param array $packages Packages.
 	 *
 	 * @return mixed
 	 */
@@ -1001,7 +1041,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			return $packages;
 		}
 
-		// Shipping details from PayPal
+		// Shipping details from PayPal.
 		try {
 			$checkout_details = $this->get_checkout_details( wc_clean( $_GET['token'] ) );
 		} catch ( PayPal_API_Exception $e ) {
@@ -1041,7 +1081,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		if ( empty( $args['order_id'] ) ) {
 			if ( class_exists( 'WC_Subscriptions_Cart' ) && function_exists( 'wcs_cart_contains_renewal' ) ) {
 				// Needs a billing agreement if the cart contains a subscription
-				// or a renewal of a subscription
+				// or a renewal of a subscription.
 				$needs_billing_agreement = (
 					WC_Subscriptions_Cart::cart_contains_subscription()
 					|| wcs_cart_contains_renewal()
@@ -1097,8 +1137,8 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 *
 	 * @since 1.4.7
 	 *
-	 * @param array  $params
-	 * @param string $handle
+	 * @param array  $params Checkout params.
+	 * @param string $handle Handle.
 	 *
 	 * @return string URL.
 	 */

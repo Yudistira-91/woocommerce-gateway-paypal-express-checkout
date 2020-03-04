@@ -1,111 +1,280 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * Abstracts shipping/billing address details.
+ */
 class PayPal_Address {
+
+	/**
+	 * Address name property.
+	 *
+	 * @var string
+	 */
 	protected $_name;
+
+	/**
+	 * Address line 1 property.
+	 *
+	 * @var string
+	 */
 	protected $_street1;
+
+	/**
+	 * Address line 2 property.
+	 *
+	 * @var string
+	 */
 	protected $_street2;
+
+	/**
+	 * Address city property.
+	 *
+	 * @var string
+	 */
 	protected $_city;
+
+	/**
+	 * Address state property.
+	 *
+	 * @var string
+	 */
 	protected $_state;
+
+	/**
+	 * Address ZIP code property.
+	 *
+	 * @var string
+	 */
 	protected $_zip;
+
+	/**
+	 * Address country property.
+	 *
+	 * @var string
+	 */
 	protected $_country;
+
+	/**
+	 * Address phone number property.
+	 *
+	 * @var string
+	 */
 	protected $_phoneNumber;
+
+	/**
+	 * Address owner property.
+	 *
+	 * @var mixed
+	 */
 	protected $_addressOwner;
+
+	/**
+	 * Address status property.
+	 *
+	 * @var mixed
+	 */
 	protected $_addressStatus;
 
 	const AddressStatusNone                      = 'none';
 	const AddressStatusConfirmed                 = 'Confirmed';
 	const AddressStatusUnconfirmed               = 'Unconfirmed';
 
+	/**
+	 * Sets the name property for the address.
+	 *
+	 * @param string $name Name.
+	 */
 	public function setName( $name ) {
 		$this->_name = $name;
 	}
 
+	/**
+	 * Returns the name property of this address.
+	 *
+	 * @return string
+	 */
 	public function getName() {
 		return $this->_name;
 	}
 
+	/**
+	 * Sets the address line 1 property for the address.
+	 *
+	 * @param string $street1 Address line 1.
+	 */
 	public function setStreet1( $street1 ) {
 		$this->_street1 = $street1;
 	}
 
+	/**
+	 * Returns the address line 1 of this address.
+	 *
+	 * @return string
+	 */
 	public function getStreet1() {
 		return $this->_street1;
 	}
 
+	/**
+	 * Sets the address line 2 property for the address.
+	 *
+	 * @param string $street2 Address line 2.
+	 */
 	public function setStreet2( $street2 ) {
 		$this->_street2 = $street2;
 	}
 
+	/**
+	 * Returns the address line 2 of this address.
+	 *
+	 * @return string
+	 */
 	public function getStreet2() {
 		return $this->_street2;
 	}
 
+	/**
+	 * Sets the city for the address.
+	 *
+	 * @param string $city City.
+	 */
 	public function setCity( $city ) {
 		$this->_city = $city;
 	}
 
+	/**
+	 * Returns the city of this address.
+	 *
+	 * @return string
+	 */
 	public function getCity() {
 		return $this->_city;
 	}
 
+	/**
+	 * Sets the state for the address.
+	 *
+	 * @param string $state State.
+	 */
 	public function setState( $state ) {
 		$this->_state = $state;
 	}
 
+	/**
+	 * Returns the state of this address.
+	 *
+	 * @return string
+	 */
 	public function getState() {
 		return $this->_state;
 	}
 
+	/**
+	 * Sets the ZIP code for the address.
+	 *
+	 * @param string $zip A ZIP code.
+	 */
 	public function setZip( $zip ) {
 		$this->_zip = $zip;
 	}
 
+	/**
+	 * Returns the ZIP code of this address.
+	 *
+	 * @return string
+	 */
 	public function getZip() {
 		return $this->_zip;
 	}
 
+	/**
+	 * Sets the country for the address.
+	 *
+	 * @param string $country Country.
+	 */
 	public function setCountry( $country ) {
 		$this->_country = $country;
 	}
 
+	/**
+	 * Returns the country of this address.
+	 *
+	 * @return string
+	 */
 	public function getCountry() {
 		return $this->_country;
 	}
 
+	/**
+	 * Sets the phone number for the address.
+	 *
+	 * @param string $phoneNumber Phone number.
+	 */
 	public function setPhoneNumber( $phoneNumber ) {
 		$this->_phoneNumber = $phoneNumber;
 	}
 
+	/**
+	 * Returns the phone number of this address.
+	 *
+	 * @return string
+	 */
 	public function getPhoneNumber() {
 		return $this->_phoneNumber;
 	}
 
+	/**
+	 * Sets the address owner for the address.
+	 *
+	 * @param mixed $addressOwner Address owner.
+	 */
 	public function setAddressOwner( $addressOwner ) {
 		$this->_addressOwner = $addressOwner;
 	}
 
+	/**
+	 * Returns the address owner of this address.
+	 *
+	 * @return mixed
+	 */
 	public function getAddressOwner() {
 		return $this->_addressOwner;
 	}
 
+	/**
+	 * Sets the address status for the address.
+	 *
+	 * @param mixed $addressStatus Address status.
+	 */
 	public function setAddressStatus( $addressStatus ) {
 		$this->_addressStatus = $addressStatus;
 	}
 
+	/**
+	 * Returns the address status of this address.
+	 *
+	 * @return mixed
+	 */
 	public function getAddressStatus() {
 		return $this->_addressStatus;
 	}
 
+	/**
+	 * Normalizes the address by normalizing country, state and ZIP code.
+	 */
 	public function normalizeAddress() {
 		$this->normalizeCountry();
 		$this->normalizeState();
 		$this->normalizeZip();
 	}
 
+	/**
+	 * Normalizes the country of this address.
+	 */
 	public function normalizeCountry() {
 		// Since many shopping carts might use the full country name for their internal representation of
 		// the country, and since PayPal expects the ISO 3166-1 alpha-2 identifier, we'll attempt to
@@ -171,7 +340,7 @@ class PayPal_Address {
 			'estonia'                          => 'EE',
 			'ethiopia'                         => 'ET',
 			'falkland islands (malvinas)'      => 'FK',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'falkland islands'                 => 'FK',
 			'fiji'                             => 'FJ',
 			'finland'                          => 'FI',
@@ -193,7 +362,7 @@ class PayPal_Address {
 			'guinea bissau'                    => 'GW',
 			'guyana'                           => 'GY',
 			'holy see (vatican city state)'    => 'VA',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'holy see'                         => 'VA',
 			'honduras'                         => 'HN',
 			'hong kong'                        => 'HK',
@@ -211,7 +380,7 @@ class PayPal_Address {
 			'kenya'                            => 'KE',
 			'kiribati'                         => 'KI',
 			'korea, republic of'               => 'KR',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'republic of korea'                => 'KR',
 			'kuwait'                           => 'KW',
 			'kyrgyzstan'                       => 'KG',
@@ -234,7 +403,7 @@ class PayPal_Address {
 			'mayotte'                          => 'YT',
 			'mexico'                           => 'MX',
 			'micronesia, federated states of'  => 'FM',
-			// The next two derivations don't show up in the list, but seem obvious
+			// The next two derivations don't show up in the list, but seem obvious.
 			'federated states of micronesia'   => 'FM',
 			'micronesia'                       => 'FM',
 			'mongolia'                         => 'MN',
@@ -266,7 +435,7 @@ class PayPal_Address {
 			'reunion'                          => 'RE',
 			'romania'                          => 'RO',
 			'russian federation'               => 'RU',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'russia'                           => 'RU',
 			'rwanda'                           => 'RW',
 			'saint helena'                     => 'SH',
@@ -297,11 +466,11 @@ class PayPal_Address {
 			'sweden'                           => 'SE',
 			'switzerland'                      => 'CH',
 			'taiwan, province of china'        => 'TW',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'taiwan'                           => 'TW',
 			'tajikistan'                       => 'TJ',
 			'tanzania, united republic of'     => 'TZ',
-			// The next two derivations don't show up in the list, but seem obvious
+			// The next two derivations don't show up in the list, but seem obvious.
 			'united republic of tanzania'      => 'TZ',
 			'tanzania'                         => 'TZ',
 			'thailand'                         => 'TH',
@@ -312,7 +481,7 @@ class PayPal_Address {
 			'turkey'                           => 'TR',
 			'turkmenistan'                     => 'TM',
 			'turks and caicos islands'         => 'TC',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'turks and caicos'                 => 'TC',
 			'tuvalu'                           => 'TV',
 			'uganda'                           => 'UG',
@@ -320,14 +489,14 @@ class PayPal_Address {
 			'united arab emirates'             => 'AE',
 			'united kingdom'                   => 'GB',
 			'united states'                    => 'US',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'united states of america'         => 'US',
 			'uruguay'                          => 'UY',
 			'vanuatu'                          => 'VU',
 			'venezuela'                        => 'VE',
 			'vietnam'                          => 'VN',
 			'virgin islands, british'          => 'VG',
-			// This derivation doesn't show up in the list, but seems obvious
+			// This derivation doesn't show up in the list, but seems obvious.
 			'british virgin islands'           => 'VG',
 			'wallis and futana'                => 'WF',
 			'yemen'                            => 'YE',
@@ -342,6 +511,9 @@ class PayPal_Address {
 		}
 	}
 
+	/**
+	 * Normalizes the state of this address.
+	 */
 	public function normalizeState() {
 		// Since some shopping carts might use the full state name for their internal representation of the
 		// state, and since PayPal expects the 2-character state/province abbreviation (for US/Canada
@@ -368,7 +540,7 @@ class PayPal_Address {
 				'connecticut'                             => 'CT',
 				'deleware'                                => 'DE',
 				'district of columbia (washington, d.c.)' => 'DC',
-				// The next several derivations don't show up in the list, but seem obvious
+				// The next several derivations don't show up in the list, but seem obvious.
 				'district of columbia'                    => 'DC',
 				'washington, d.c.'                        => 'DC',
 				'washington d.c.'                         => 'DC',
@@ -430,7 +602,7 @@ class PayPal_Address {
 				'guam'                                    => 'GU',
 				'northern mariana islands'                => 'MP',
 				'virgin islands'                          => 'VI',
-				// The next few derivations don't show up on the list, but seem obvious
+				// The next few derivations don't show up on the list, but seem obvious.
 				'us virgin islands'                       => 'VI',
 				'u.s. virgin islands'                     => 'VI',
 				'u s virgin islands'                      => 'VI',
@@ -451,7 +623,7 @@ class PayPal_Address {
 				'quebec'                => 'QC',
 				'saskatchewan'          => 'SK',
 				'yukon'                 => 'YT',
-				// This derivation doesn't show up on the list, but seems obvious
+				// This derivation doesn't show up on the list, but seems obvious.
 				'yukon territory'       => 'YT'
 			);
 		} elseif ( 'IT' == $this->_country ) {
@@ -512,7 +684,7 @@ class PayPal_Address {
 				'milano'                => 'MI',
 				'modena'                => 'MO',
 				'monza e brianza'       => 'MB',
-				// The next couple of derivations are based off information from Wikipedia
+				// The next couple of derivations are based off information from Wikipedia.
 				'monza and brianza'     => 'MB',
 				'monza e della brianza' => 'MB',
 				'napoli'                => 'NA',
@@ -558,7 +730,7 @@ class PayPal_Address {
 				'varese'                => 'VA',
 				'venezia'               => 'VE',
 				'verbania-cusio-ossola' => 'VB',
-				// This derivation doesn't appear in the list, but seems obvious
+				// This derivation doesn't appear in the list, but seems obvious.
 				'verbania cusio ossola' => 'VB',
 				'vercelli'              => 'VC',
 				'verona'                => 'VR',
@@ -588,7 +760,7 @@ class PayPal_Address {
 				'co cavan'     => 'CN',
 				'co carlow'    => 'CW',
 				'co donegal'   => 'DL',
-				// All of these should be mapped to Dublin start
+				// All of these should be mapped to Dublin start.
 				'co dublin'    => 'DN',
 				'dublin 1'     => 'DN',
 				'dublin 2'     => 'DN',
@@ -612,7 +784,7 @@ class PayPal_Address {
 				'dublin 20'    => 'DN',
 				'dublin 22'    => 'DN',
 				'dublin 24'    => 'DN',
-				// All of these should be mapped to Dublin end
+				// All of these should be mapped to Dublin end.
 				'co galway'    => 'GY',
 				'co kildare'   => 'KE',
 				'co kilkenny'  => 'KK',
@@ -642,10 +814,21 @@ class PayPal_Address {
 
 	}
 
+	/**
+	 * Normalizes the ZIP code of this address.
+	 *
+	 * @return void
+	 */
 	public function normalizeZip() {
-		// TODO: Try to do some ZIP code normalization
+		// TODO: Try to do some ZIP code normalization.
 	}
 
+	/**
+	 * Returns the address as an array for use with PayPal.
+	 *
+	 * @param string $prefix Prefix to apply to each key.
+	 * @return array Array with 'NAME', 'STREET', 'STREET2', 'CITY', 'STATE', 'ZIP', 'COUNTRYCODE' and 'PHONENUM' keys prefixed with $prefix.
+	 */
 	public function getAddressParams( $prefix = '' ) {
 		$params = array(
 			$prefix . 'NAME'        => $this->_name,
@@ -661,6 +844,14 @@ class PayPal_Address {
 		return $params;
 	}
 
+	/**
+	 * Sets the properties for this address object from an EC response array.
+	 *
+	 * @param array   $getECResponse    EC response.
+	 * @param string  $prefix           Prefix.
+	 * @param boolean $isBillingAddress Is billing address?.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse, $prefix, $isBillingAddress = false ) {
 		$map = array(
 			'NAME'          => '_name',
@@ -695,13 +886,13 @@ class PayPal_Address {
 			}
 		}
 
-		// After the state has been set, attempt to normalize (in case it comes from a PayPal response)
+		// After the state has been set, attempt to normalize (in case it comes from a PayPal response).
 		$this->normalizeState();
 
 		return $found_any;
 	}
 
-	/*
+	/**
 	 * Checks to see if the PayPal_Address object has all the
 	 * required parameters when using a shipping address.
 	 *
@@ -728,7 +919,7 @@ class PayPal_Address {
 		$has_zip     = ! empty( $this->getZip() );
 		$has_state   = ! empty( $this->getState() );
 
-		// If the country is the US, a zipcode is required
+		// If the country is the US, a zipcode is required.
 		$has_zip_if_required = (
 			'US' === $this->getCountry()
 			? $has_zip
@@ -737,21 +928,21 @@ class PayPal_Address {
 
 		// A state is required is the country is one of
 		// Argentina, Brazil, Canada, China, Indonesia,
-		// India, Japan, Mexico, Thailand or USA
+		// India, Japan, Mexico, Thailand or USA.
 		$has_state_if_required = (
 			in_array(
 				$this->getCountry(),
 				array(
-					'AR', // Argentina
-					'BR', // Brazil
-					'CA', // Canada
-					'CN', // China
-					'ID', // Indonesia
-					'IN', // India
-					'JP', // Japan
-					'MX', // Mexico
-					'TH', // Thailand
-					'US', // USA
+					'AR', // Argentina.
+					'BR', // Brazil.
+					'CA', // Canada.
+					'CN', // China.
+					'ID', // Indonesia.
+					'IN', // India.
+					'JP', // Japan.
+					'MX', // Mexico.
+					'TH', // Thailand.
+					'US', // USA.
 				),
 				true
 			)

@@ -1,13 +1,17 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
  * Implementation is duplicated in WC_Gateway_PPEC_With_SPB.
  */
 class WC_Gateway_PPEC_With_SPB extends WC_Gateway_PPEC_With_PayPal {
+
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		parent::__construct();
 
@@ -40,7 +44,7 @@ class WC_Gateway_PPEC_With_SPB extends WC_Gateway_PPEC_With_PayPal {
 	 * Save data necessary for authorizing payment to session, in order to
 	 * go ahead with processing payment and bypass redirecting to PayPal.
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return array
 	 */

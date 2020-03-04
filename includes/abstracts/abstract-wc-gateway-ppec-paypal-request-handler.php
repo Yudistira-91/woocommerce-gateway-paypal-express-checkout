@@ -21,18 +21,21 @@ abstract class WC_Gateway_PPEC_PayPal_Request_Handler {
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Gateway_PPEC $gateway PPEC gateway instance
+	 * @param WC_Gateway_PPEC $gateway PPEC gateway instance.
 	 */
 	public function __construct( WC_Gateway_PPEC $gateway ) {
 		$this->gateway = $gateway;
 	}
 
+	/**
+	 * Request handler implementation.
+	 */
 	abstract protected function handle();
 
 	/**
 	 * Get the order from the PayPal 'Custom' variable.
 	 *
-	 * @param  string $raw_custom JSON Data passed back by PayPal
+	 * @param  string $raw_custom JSON Data passed back by PayPal.
 	 * @return bool|WC_Order      Order object or false
 	 */
 	protected function get_paypal_order( $raw_custom ) {
@@ -67,9 +70,9 @@ abstract class WC_Gateway_PPEC_PayPal_Request_Handler {
 	/**
 	 * Complete order, add transaction ID and note.
 	 *
-	 * @param  WC_Order $order  Order object
-	 * @param  string   $txn_id Transaction ID
-	 * @param  string   $note   Order note
+	 * @param  WC_Order $order  Order object.
+	 * @param  string   $txn_id Transaction ID.
+	 * @param  string   $note   Order note.
 	 */
 	protected function payment_complete( $order, $txn_id = '', $note = '' ) {
 		$order->add_order_note( $note );
@@ -79,8 +82,8 @@ abstract class WC_Gateway_PPEC_PayPal_Request_Handler {
 	/**
 	 * Hold order and add note.
 	 *
-	 * @param  WC_Order $order  Order object
-	 * @param  string   $reason On-hold reason
+	 * @param  WC_Order $order  Order object.
+	 * @param  string   $reason On-hold reason.
 	 */
 	protected function payment_on_hold( $order, $reason = '' ) {
 		$order->update_status( 'on-hold', $reason );

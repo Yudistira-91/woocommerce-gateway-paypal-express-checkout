@@ -1,9 +1,12 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_Client_Credential_Certificate
+ */
 class WC_Gateway_PPEC_Client_Credential_Certificate extends WC_Gateway_PPEC_Client_Credential {
 
 	/**
@@ -48,9 +51,9 @@ class WC_Gateway_PPEC_Client_Credential_Certificate extends WC_Gateway_PPEC_Clie
 	 * Allow certificate-based credential to configure cURL, especially
 	 * to set CURLOPT_SSLCERT and CURLOPT_SSLCERTPASSWD.
 	 *
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 *
-	 * @param resource &$handle The cURL handle returned by curl_init().
+	 * @param resource $handle The cURL handle returned by curl_init().
 	 * @param array    $r       The HTTP request arguments.
 	 * @param string   $url     The request URL.
 	 *
@@ -75,9 +78,9 @@ class WC_Gateway_PPEC_Client_Credential_Certificate extends WC_Gateway_PPEC_Clie
 	 * Dump the certificate out to a temporary file, because cURL can't accept
 	 * it any other way.
 	 *
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 *
-	 * @param string $password Password for certificate when using secure transport
+	 * @param string $password Password for certificate when using secure transport.
 	 *
 	 * @return string Filepath of certificate file
 	 */
@@ -101,9 +104,10 @@ class WC_Gateway_PPEC_Client_Credential_Certificate extends WC_Gateway_PPEC_Clie
 	 * If we're using SecureTransport, we have to translate the certificate to
 	 * PKCS12 before passing it to cURL.
 	 *
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 *
-	 * @param string $temp_file Filepath to temporary certificate file
+	 * @param string $temp_file Filepath to temporary certificate file.
+	 * @param string $password  Encryption password.
 	 *
 	 * @return void
 	 */
@@ -123,9 +127,9 @@ class WC_Gateway_PPEC_Client_Credential_Certificate extends WC_Gateway_PPEC_Clie
 	 * Create non-password certificate file. Basically just dump the certificate
 	 * string to temporary file.
 	 *
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 *
-	 * @param string $temp_file Filepath to temporary certificate file
+	 * @param string $temp_file Filepath to temporary certificate file.
 	 *
 	 * @return void
 	 */

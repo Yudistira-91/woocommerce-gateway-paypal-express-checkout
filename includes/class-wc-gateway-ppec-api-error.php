@@ -1,15 +1,49 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * PayPal_API_Error
+ */
 class PayPal_API_Error {
+	/**
+	 * PayPal error code.
+	 *
+	 * @var string
+	 */
 	public $error_code;
+
+	/**
+	 * Short message.
+	 *
+	 * @var string
+	 */
 	public $short_message;
+
+	/**
+	 * Long error message.
+	 *
+	 * @var string
+	 */
 	public $long_message;
+
+	/**
+	 * Severity code.
+	 *
+	 * @var string
+	 */
 	public $severity_code;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param string $error_code    PayPal error code.
+	 * @param string $short_message Short message.
+	 * @param string $long_message  Long message.
+	 * @param string $severity_code Severity code.
+	 */
 	public function __construct( $error_code, $short_message, $long_message, $severity_code ) {
 		$this->error_code    = $error_code;
 		$this->short_message = $short_message;
@@ -17,7 +51,12 @@ class PayPal_API_Error {
 		$this->severity_code = $severity_code;
 	}
 
-	public function mapToBuyerFriendlyError() {
+	/**
+	 * Returns an user-friendly description of the error (based on its error code).
+	 *
+	 * @return string
+	 */
+	public function mapToBuyerFriendlyError() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		switch ( $this->error_code ) {
 			case '-1':    return __( 'Unable to communicate with PayPal.  Please try your payment again.', 'woocommerce-gateway-paypal-express-checkout' );
 			case '10407': return __( 'PayPal rejected your email address because it is not valid.  Please double-check your email address and try again.', 'woocommerce-gateway-paypal-express-checkout' );

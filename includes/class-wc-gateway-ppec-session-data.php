@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -75,7 +75,7 @@ class WC_Gateway_PPEC_Session_Data {
 	/**
 	 * Constructor.
 	 *
-	 * @param array $args Arguments for session data
+	 * @param array $args Arguments for session data.
 	 */
 	public function __construct( $args = array() ) {
 		$args = wp_parse_args(

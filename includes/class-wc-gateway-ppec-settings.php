@@ -55,12 +55,24 @@ class WC_Gateway_PPEC_Settings {
 	 */
 	private $_is_setting_loaded = false;
 
+	/**
+	 * Sets the value for a valid setting.
+	 *
+	 * @param string $key   Key.
+	 * @param mixed  $value Value.
+	 */
 	public function __set( $key, $value ) {
 		if ( array_key_exists( $key, $this->_settings ) ) {
 			$this->_settings[ $key ] = $value;
 		}
 	}
 
+	/**
+	 * Gets the value for a given setting.
+	 *
+	 * @param string $key Key.
+	 * @return mixed
+	 */
 	public function __get( $key ) {
 		if ( array_key_exists( $key, $this->_settings ) ) {
 			return $this->_settings[ $key ];
@@ -68,10 +80,20 @@ class WC_Gateway_PPEC_Settings {
 		return null;
 	}
 
+	/**
+	 * Checks whether a given setting is set.
+	 *
+	 * @param string $key Key.
+	 * @return boolean
+	 */
 	public function __isset( $key ) {
 		return array_key_exists( $key, $this->_settings );
 	}
 
+	/**
+	 * Constructor.
+	 * Loads all the plugin settings from the database.
+	 */
 	public function __construct() {
 		$this->load();
 	}
@@ -81,7 +103,7 @@ class WC_Gateway_PPEC_Settings {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param bool $force_reload Force reload settings
+	 * @param bool $force_reload Force reload settings.
 	 *
 	 * @return WC_Gateway_PPEC_Settings Instance of WC_Gateway_PPEC_Settings
 	 */
@@ -98,6 +120,7 @@ class WC_Gateway_PPEC_Settings {
 	 * Load settings from DB.
 	 *
 	 * @deprecated
+	 * @param bool $force_reload Force reload settings.
 	 */
 	public function load_settings( $force_reload = false ) {
 		_deprecated_function( __METHOD__, '1.2.0', 'WC_Gateway_PPEC_Settings::load' );
@@ -151,7 +174,7 @@ class WC_Gateway_PPEC_Settings {
 	/**
 	 * Get PayPal redirect URL.
 	 *
-	 * @param string $token  Token
+	 * @param string $token  Token.
 	 * @param bool   $commit If set to true, 'useraction' parameter will be set
 	 *                       to 'commit' which makes PayPal sets the button text
 	 *                       to **Pay Now** ont the PayPal _Review your information_
@@ -180,12 +203,24 @@ class WC_Gateway_PPEC_Settings {
 		return $url;
 	}
 
+	/**
+	 * Deprecated method.
+	 *
+	 * @deprecated
+	 * @param int $buckets Buckets.
+	 */
 	public function get_set_express_checkout_shortcut_params( $buckets = 1 ) {
 		_deprecated_function( __METHOD__, '1.2.0', 'WC_Gateway_PPEC_Client::get_set_express_checkout_params' );
 
 		return wc_gateway_ppec()->client->get_set_express_checkout_params( array( 'skip_checkout' => true ) );
 	}
 
+	/**
+	 * Deprecated method.
+	 *
+	 * @deprecated
+	 * @param int $buckets Buckets.
+	 */
 	public function get_set_express_checkout_mark_params( $buckets = 1 ) {
 		_deprecated_function( __METHOD__, '1.2.0', 'WC_Gateway_PPEC_Client::get_set_express_checkout_params' );
 
@@ -202,8 +237,8 @@ class WC_Gateway_PPEC_Settings {
 	 *
 	 * @see https://developer.paypal.com/docs/classic/api/merchant/DoExpressCheckoutPayment_API_Operation_NVP/
 	 *
-	 * @param WC_Order  $order   Order object
-	 * @param int|array $buckets Number of buckets or list of bucket
+	 * @param WC_Order  $order   Order object.
+	 * @param int|array $buckets Number of buckets or list of bucket.
 	 *
 	 * @return array DoExpressCheckoutPayment parameters
 	 */
@@ -275,7 +310,7 @@ class WC_Gateway_PPEC_Settings {
 	/**
 	 * Get session length.
 	 *
-	 * @todo Map this to a merchant-configurable setting
+	 * @todo Map this to a merchant-configurable setting.
 	 *
 	 * @return int
 	 */

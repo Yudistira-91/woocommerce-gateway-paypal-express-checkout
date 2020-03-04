@@ -22,6 +22,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 
 	/**
 	 * Check request.
+	 *
+	 * @throws Exception In case of failure.
 	 */
 	public function check_request() {
 		try {
@@ -45,9 +47,9 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Check with PayPal whether posted data is valid IPN request.
 	 *
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 *
-	 * @param array $posted_data Posted data
+	 * @param array $posted_data Posted data.
 	 * @return bool True if posted_data is valid IPN request
 	 */
 	public function is_valid_ipn_request( array $posted_data ) {
@@ -89,7 +91,7 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle valid IPN request.
 	 *
-	 * @param array $posted_data Posted data
+	 * @param array $posted_data Posted data.
 	 */
 	public function handle_valid_ipn( $posted_data ) {
 		if ( ! empty( $posted_data['custom'] ) && ( $order = $this->get_paypal_order( $posted_data['custom'] ) ) ) {
@@ -116,7 +118,7 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Check for a valid transaction type.
 	 *
-	 * @param string $txn_type Transaction type
+	 * @param string $txn_type Transaction type.
 	 */
 	protected function validate_transaction_type( $txn_type ) {
 		$accepted_types = array( 'cart', 'instant', 'express_checkout', 'web_accept', 'masspay', 'send_money' );
@@ -129,8 +131,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Check currency from IPN matches the order.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param string   $currency Currency
+	 * @param WC_Order $order Order object.
+	 * @param string   $currency Currency.
 	 */
 	protected function validate_currency( $order, $currency ) {
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
@@ -148,8 +150,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Check payment amount from IPN matches the order.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param int      $amount Amount
+	 * @param WC_Order $order Order object.
+	 * @param int      $amount Amount.
 	 */
 	protected function validate_amount( $order, $amount ) {
 		if ( number_format( $order->get_total(), 2, '.', '' ) != number_format( $amount, 2, '.', '' ) ) {
@@ -164,8 +166,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a completed payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_completed( $order, $posted_data ) {
 		$old_wc   = version_compare( WC_VERSION, '3.0', '<' );
@@ -200,8 +202,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a pending payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_pending( $order, $posted_data ) {
 		$this->payment_status_completed( $order, $posted_data );
@@ -210,8 +212,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a failed payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_failed( $order, $posted_data ) {
 		// Translators: placeholder is a payment status.
@@ -221,8 +223,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a denied payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_denied( $order, $posted_data ) {
 		$this->payment_status_failed( $order, $posted_data );
@@ -231,8 +233,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle an expired payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_expired( $order, $posted_data ) {
 		$this->payment_status_failed( $order, $posted_data );
@@ -241,8 +243,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a voided payment.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_voided( $order, $posted_data ) {
 		$this->payment_status_failed( $order, $posted_data );
@@ -251,8 +253,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a refunded order.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_refunded( $order, $posted_data ) {
 		// Only handle full refunds, not partial.
@@ -273,8 +275,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a reveral.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_reversed( $order, $posted_data ) {
 		$order_id = version_compare( WC_VERSION, '3.0', '<' ) ? $order->id : $order->get_id();
@@ -291,8 +293,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Handle a cancelled reveral.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function payment_status_canceled_reversal( $order, $posted_data ) {
 		$order_id = version_compare( WC_VERSION, '3.0', '<' ) ? $order->id : $order->get_id();
@@ -307,12 +309,12 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Save important data from the IPN to the order.
 	 *
-	 * @param WC_Order $order Order object
-	 * @param array    $posted_data Posted data
+	 * @param WC_Order $order Order object.
+	 * @param array    $posted_data Posted data.
 	 */
 	protected function save_paypal_meta_data( $order, $posted_data ) {
 
-		// A map of PayPal $POST keys to order meta keys
+		// A map of PayPal $POST keys to order meta keys.
 		$mapped_keys = array(
 			'payer_email'    => 'Payer PayPal address',
 			'first_name'     => 'Payer first name',
@@ -345,8 +347,8 @@ class WC_Gateway_PPEC_IPN_Handler extends WC_Gateway_PPEC_PayPal_Request_Handler
 	/**
 	 * Send a notification to the user handling orders.
 	 *
-	 * @param string $subject Email subject
-	 * @param string $message Email message
+	 * @param string $subject Email subject.
+	 * @param string $message Email message.
 	 */
 	protected function send_ipn_email_notification( $subject, $message ) {
 		$new_order_settings = get_option( 'woocommerce_new_order_settings', array() );

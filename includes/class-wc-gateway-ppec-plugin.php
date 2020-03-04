@@ -1,12 +1,17 @@
 <?php
 /**
  * PayPal Checkout Plugin.
+ *
+ * @package WooCommerce_PPEC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+/**
+ * WC_Gateway_PPEC_Plugin
+ */
 class WC_Gateway_PPEC_Plugin {
 
 	const ALREADY_BOOTSTRAPED = 1;
@@ -65,8 +70,8 @@ class WC_Gateway_PPEC_Plugin {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $file    Filepath of main plugin file
-	 * @param string $version Plugin version
+	 * @param string $file    Filepath of main plugin file.
+	 * @param string $version Plugin version.
 	 */
 	public function __construct( $file, $version ) {
 		$this->file    = $file;
@@ -84,7 +89,7 @@ class WC_Gateway_PPEC_Plugin {
 	 * @param string $new_version The plugin's new version.
 	 */
 	private function run_updater( $new_version ) {
-		// Map old settings to settings API
+		// Map old settings to settings API.
 		if ( get_option( 'pp_woo_enabled' ) ) {
 			$settings_array                               = (array) get_option( 'woocommerce_ppec_paypal_settings', array() );
 			$settings_array['enabled']                    = get_option( 'pp_woo_enabled' ) ? 'yes' : 'no';
@@ -151,6 +156,11 @@ class WC_Gateway_PPEC_Plugin {
 		add_action( 'wp_ajax_ppec_dismiss_notice_message', array( $this, 'ajax_dismiss_notice' ) );
 	}
 
+	/**
+	 * Bootstraps the PPEC plugin.
+	 *
+	 * @throws Exception If called more than one time.
+	 */
 	public function bootstrap() {
 		try {
 			if ( $this->_bootstrapped ) {
@@ -180,6 +190,9 @@ class WC_Gateway_PPEC_Plugin {
 		}
 	}
 
+	/**
+	 * Shows a warning message when there are errors during the plugins' bootstrapping.
+	 */
 	public function show_bootstrap_warning() {
 		$dependencies_message = isset( $this->bootstrap_warning_message ) ? $this->bootstrap_warning_message : null;
 		if ( ! empty( $dependencies_message ) && 'yes' !== get_option( 'wc_gateway_ppec_bootstrap_warning_message_dismissed', 'no' ) ) {
@@ -226,6 +239,9 @@ class WC_Gateway_PPEC_Plugin {
 		}
 	}
 
+	/**
+	 * Shows a warning message when PPEC is enabled but not in SPB mode.
+	 */
 	public function show_spb_notice() {
 		// Should only show when PPEC is enabled but not in SPB mode.
 		if ( 'yes' !== $this->settings->enabled || 'yes' === $this->settings->use_spb ) {
@@ -275,7 +291,7 @@ class WC_Gateway_PPEC_Plugin {
 	/**
 	 * Check dependencies.
 	 *
-	 * @throws Exception
+	 * @throws Exception When a dependency is not met.
 	 */
 	protected function _check_dependencies() {
 		if ( ! function_exists( 'WC' ) ) {
@@ -311,7 +327,7 @@ class WC_Gateway_PPEC_Plugin {
 	 *
 	 * @see https://github.com/woothemes/woocommerce-gateway-paypal-express-checkout/issues/112
 	 *
-	 * @throws Exception
+	 * @throws Exception When credentials are not set.
 	 */
 	protected function _check_credentials() {
 		$credential = $this->settings->get_active_api_credentials();
@@ -414,7 +430,7 @@ class WC_Gateway_PPEC_Plugin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $domains Whitelisted domains for `wp_safe_redirect`
+	 * @param array $domains Whitelisted domains for `wp_safe_redirect`.
 	 *
 	 * @return array $domains Whitelisted domains for `wp_safe_redirect`
 	 */
@@ -440,7 +456,7 @@ class WC_Gateway_PPEC_Plugin {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $links Plugin action links
+	 * @param array $links Plugin action links.
 	 *
 	 * @return array Plugin action links
 	 */

@@ -1,10 +1,16 @@
 <?php
 /**
- * TODO: Move each class into its own file and group them under one dir, checkout-details.
+ * Checkout details.
+ *
+ * @package WooCommerce_PPEC
  */
 
+// phpcs:disable Squiz.Commenting.VariableComment.Missing,Squiz.Commenting.ClassComment.Missing,Squiz.Commenting.FunctionComment.Missing
+
+// TODO: Move each class into its own file and group them under one dir, checkout-details.
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 $includes_path = wc_gateway_ppec()->includes_path;
@@ -196,7 +202,7 @@ class PayPal_Checkout_Payment_Details {
 			}
 		}
 
-		// See if we have any line items that need to be parsed
+		// See if we have any line items that need to be parsed.
 		$max_line_item_num = -1;
 		foreach ( $getECResponse as $index => $value ) {
 			if ( preg_match( '/^L_PAYMENTREQUEST_' . $bucketNum . '_(NAME|DESC|AMT|NUMBER|QTY|TAXAMT|ITEMWEIGHTVALUE|ITEMWEIGHTUNIT|ITEMLENGTHVALUE|ITEMLENGTHUNIT|ITEMWIDTHVALUE|ITEMWIDTHUNIT|ITEMHEIGHTVALUE|ITEMHEIGHTUNIT|ITEMCATEGORY|EBAYITEMNUMBER|EBAYITEMAUCTIONTXNID|EBAYITEMORDERID|EBAYITEMCARTID)(\d+)$/', $index, $matches ) ) {
@@ -342,8 +348,13 @@ class PayPal_Checkout_Shipping_Option_Details {
 	public $shipping_option_amount     = false;
 	public $shipping_option_name       = false;
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array $getECResponse EC response.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse ) {
 		$map = array(
 			'SHIPPINGCALCULATIONMODE' => 'calculation_mode',
@@ -372,8 +383,13 @@ class PayPal_Checkout_Instrument_Details {
 
 	public $instrument_id                = false;
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array $getECResponse EC response.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse ) {
 		$map = array(
 			'INSTRUMENTCATEGORY' => 'instrument_category',
@@ -408,8 +424,14 @@ class PayPal_Checkout_Wallet_Details {
 		$this->wallet_description = $wallet_description;
 	}
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array  $getECResponse EC response.
+	 * @param string $wallet_num    wallet_num.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse, $wallet_num ) {
 		$found_any = false;
 		foreach ( $getECResponse as $index => $value ) {
@@ -447,8 +469,13 @@ class PayPal_Checkout_Payer_Details {
 
 	public $billing_address     = false;
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array $getECResponse EC response.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse ) {
 		$map = array(
 			'PHONENUM'    => 'phone_number',
@@ -497,8 +524,13 @@ class PayPal_Checkout_Gift_Details {
 	public $gift_wrap_name       = false;
 	public $gift_wrap_amount     = false;
 
-	// Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
-	// If not, it returns false to indicate that the caller can destroy this object.
+	/**
+	 * Returns true to indicate that the getECResponse array contained variables that were pertinent to this object.
+	 * If not, it returns false to indicate that the caller can destroy this object.
+	 *
+	 * @param array $getECResponse EC response.
+	 * @return bool
+	 */
 	public function loadFromGetECResponse( $getECResponse ) {
 		$map = array(
 			'GIFTMESSAGE'       => 'gift_message',

@@ -58,7 +58,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 
-		// Change gateway name if session is active
+		// Change gateway name if session is active.
 		if ( ! is_admin() ) {
 			if ( wc_gateway_ppec()->checkout->is_started_from_checkout_page() ) {
 				$this->title        = $this->get_option( 'title' );
@@ -108,7 +108,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 	/**
 	 * Process payments.
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return array
 	 */
@@ -130,7 +130,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 			}
 		} else {
 			try {
-				// Get details
+				// Get details.
 				$checkout_details = $checkout->get_checkout_details( $session->token );
 
 				$checkout_context = array(
@@ -143,7 +143,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				// Complete the payment now.
 				$checkout->do_payment( $order, $session->token, $session->payer_id );
 
-				// Clear Cart
+				// Clear Cart.
 				WC()->cart->empty_cart();
 
 				return array(
@@ -183,7 +183,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 	/**
 	 * Get info about uploaded certificate.
 	 *
-	 * @param  string $cert_string
+	 * @param  string $cert_string Certificate string.
 	 * @return string
 	 */
 	private function get_certificate_info( $cert_string ) {
@@ -351,9 +351,9 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 	/**
 	 * Process refund.
 	 *
-	 * @param int    $order_id Order ID
-	 * @param float  $amount   Order amount
-	 * @param string $reason   Refund reason
+	 * @param int    $order_id Order ID.
+	 * @param float  $amount   Order amount.
+	 * @param string $reason   Refund reason.
 	 *
 	 * @return boolean True or false based on success, or a WP_Error object.
 	 */
@@ -367,7 +367,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 		// load up refundable_txns from Post Meta
 		// loop through each transaction to compile list of txns that are able to be refunded
 		// process refunds against each txn in the list until full amount of refund is reached
-		// first loop through, try to find a transaction that equals the refund amount being requested
+		// first loop through, try to find a transaction that equals the refund amount being requested.
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 		$txn_data = $old_wc ? get_post_meta( $order_id, '_woo_pp_txnData', true ) : $order->get_meta( '_woo_pp_txnData', true );
 		$order_currency = $old_wc ? $order->order_currency : $order->get_currency();
@@ -476,7 +476,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 	/**
 	 * Get the transaction URL.
 	 *
-	 * @param  WC_Order $order
+	 * @param  WC_Order $order An order object.
 	 * @return string
 	 */
 	public function get_transaction_url( $order ) {
@@ -500,8 +500,8 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 	/**
 	 * Generate Image HTML.
 	 *
-	 * @param  mixed $key
-	 * @param  mixed $data
+	 * @param  mixed $key  Key.
+	 * @param  mixed $data Value.
 	 * @since  1.5.0
 	 * @return string
 	 */
@@ -526,7 +526,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 		$maybe_hide_add_style    = '';
 		$maybe_hide_remove_style = '';
 
-		// For backwards compatibility (customers that already have set a url)
+		// For backwards compatibility (customers that already have set a url).
 		$value_is_url            = filter_var( $value, FILTER_VALIDATE_URL ) !== false;
 
 		if ( empty( $value ) || $value_is_url ) {
