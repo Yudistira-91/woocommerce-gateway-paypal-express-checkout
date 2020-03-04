@@ -134,7 +134,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				$checkout_details = $checkout->get_checkout_details( $session->token );
 
 				$checkout_context = array(
-					'order_id'   => $order_id,
+					'order_id' => $order_id,
 				);
 				if ( $checkout->needs_billing_agreement_creation( $checkout_context ) ) {
 					$checkout->create_billing_agreement( $order, $checkout_details );
@@ -182,6 +182,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 
 	/**
 	 * Get info about uploaded certificate.
+	 *
 	 * @param  string $cert_string
 	 * @return string
 	 */
@@ -317,7 +318,6 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				} catch ( PayPal_API_Exception $ex ) {
 					WC_Admin_Settings::add_error( __( 'An error occurred while trying to validate your API credentials.  Unable to verify that your API credentials are correct.', 'woocommerce-gateway-paypal-express-checkout' ) );
 				}
-
 			} else {
 
 				WC_Admin_Settings::add_error( __( 'Error: You must provide API signature or certificate.', 'woocommerce-gateway-paypal-express-checkout' ) );
@@ -412,7 +412,6 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 				} catch ( PayPal_API_Exception $e ) {
 					return new WP_Error( 'paypal_refund_error', $e->getMessage() );
 				}
-
 			}
 		}
 

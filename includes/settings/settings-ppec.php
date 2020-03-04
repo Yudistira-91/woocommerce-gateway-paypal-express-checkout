@@ -50,7 +50,8 @@ if ( ! wc_gateway_ppec_is_credit_supported() ) {
 
 $credit_enabled_description  = __( 'This enables PayPal Credit, which displays a PayPal Credit button next to the primary PayPal Checkout button. PayPal Checkout lets you give customers access to financing through PayPal Credit® - at no additional cost to you. You get paid up front, even though customers have more time to pay. A pre-integrated payment button shows up next to the PayPal Button, and lets customers pay quickly with PayPal Credit®. (Should be unchecked for stores involved in Real Money Gaming.)', 'woocommerce-gateway-paypal-express-checkout' );
 
-wc_enqueue_js( "
+wc_enqueue_js(
+	"
 	jQuery( function( $ ) {
 		var ppec_mark_fields      = '#woocommerce_ppec_paypal_title, #woocommerce_ppec_paypal_description';
 		var ppec_live_fields      = '#woocommerce_ppec_paypal_api_username, #woocommerce_ppec_paypal_api_password, #woocommerce_ppec_paypal_api_signature, #woocommerce_ppec_paypal_api_certificate, #woocommerce_ppec_paypal_api_subject';
@@ -245,16 +246,18 @@ wc_enqueue_js( "
 		} );
 
 	});
-" );
+"
+);
 
 /**
  * Settings for PayPal Gateway.
  */
+// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 $settings = array(
 	'enabled' => array(
-		'title'   => __( 'Enable/Disable', 'woocommerce-gateway-paypal-express-checkout' ),
-		'type'    => 'checkbox',
-		'label'   => __( 'Enable PayPal Checkout', 'woocommerce-gateway-paypal-express-checkout' ),
+		'title'       => __( 'Enable/Disable', 'woocommerce-gateway-paypal-express-checkout' ),
+		'type'        => 'checkbox',
+		'label'       => __( 'Enable PayPal Checkout', 'woocommerce-gateway-paypal-express-checkout' ),
 		'description' => __( 'This enables PayPal Checkout which allows customers to checkout directly via PayPal from your cart page.', 'woocommerce-gateway-paypal-express-checkout' ),
 		'desc_tip'    => true,
 		'default'     => 'yes',
@@ -622,7 +625,8 @@ $settings['mini_cart_settings_toggle'] = array(
 	'desc_tip'    => true,
 	'description' => __( 'Optionally override global button settings above and configure buttons for this context.', 'woocommerce-gateway-paypal-express-checkout' ),
 );
-foreach( $per_context_settings as $key => $value ) {
+
+foreach ( $per_context_settings as $key => $value ) {
 	$value['class'] .= ' woocommerce_ppec_paypal_mini_cart';
 	$settings[ 'mini_cart_' . $key ] = $value;
 }
@@ -653,7 +657,8 @@ $settings['single_product_settings_toggle'] = array(
 	'desc_tip'    => true,
 	'description' => __( 'Optionally override global button settings above and configure buttons for this context.', 'woocommerce-gateway-paypal-express-checkout' ),
 );
-foreach( $per_context_settings as $key => $value ) {
+
+foreach ( $per_context_settings as $key => $value ) {
 	$value['class'] .= ' woocommerce_ppec_paypal_single_product';
 	$settings[ 'single_product_' . $key ] = $value;
 }
@@ -685,9 +690,12 @@ $settings['mark_settings_toggle'] = array(
 	'desc_tip'    => true,
 	'description' => __( 'Optionally override global button settings above and configure buttons for this context.', 'woocommerce-gateway-paypal-express-checkout' ),
 );
-foreach( $per_context_settings as $key => $value ) {
+
+foreach ( $per_context_settings as $key => $value ) {
 	$value['class'] .= ' woocommerce_ppec_paypal_mark';
 	$settings[ 'mark_' . $key ] = $value;
 }
+
+// phpcs:enable
 
 return apply_filters( 'woocommerce_paypal_express_checkout_settings', $settings );

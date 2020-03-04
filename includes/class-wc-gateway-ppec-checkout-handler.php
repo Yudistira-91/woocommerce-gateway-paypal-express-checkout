@@ -71,6 +71,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 	/**
 	 * Handle endpoint page title
+	 *
 	 * @param  string $title
 	 * @return string
 	 */
@@ -282,6 +283,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * allow the customer to create an account.
 	 *
 	 *  Is hooked to woocommerce_checkout_billing action by checkout_init
+	 *
 	 * @since 1.2.0
 	 */
 	public function account_registration() {
@@ -292,7 +294,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			if ( $checkout->enable_guest_checkout ) {
 				?>
 				<p class="form-row form-row-wide create-account">
-					<input class="input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true) ?> type="checkbox" name="createaccount" value="1" /> <label for="createaccount" class="checkbox"><?php _e( 'Create an account?', 'woocommerce-gateway-paypal-express-checkout' ); ?></label>
+					<input class="input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true ) ?> type="checkbox" name="createaccount" value="1" /> <label for="createaccount" class="checkbox"><?php _e( 'Create an account?', 'woocommerce-gateway-paypal-express-checkout' ); ?></label>
 				</p>
 				<?php
 			}
@@ -314,7 +316,6 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				</div>
 				<?php
 			}
-
 		}
 	}
 
@@ -356,6 +357,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	/**
 	 * Map PayPal billing address to WC shipping address
 	 * NOTE: Not all PayPal_Checkout_Payer_Details objects include a billing address
+	 *
 	 * @param  object $checkout_details
 	 * @return array
 	 */
@@ -402,14 +404,14 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$first_name = array_shift( $name );
 		$last_name  = implode( ' ', $name );
 		$result = array(
-			'first_name'    => $first_name,
-			'last_name'     => $last_name,
-			'address_1'     => $checkout_details->payments[0]->shipping_address->getStreet1(),
-			'address_2'     => $checkout_details->payments[0]->shipping_address->getStreet2(),
-			'city'          => $checkout_details->payments[0]->shipping_address->getCity(),
-			'state'         => $checkout_details->payments[0]->shipping_address->getState(),
-			'postcode'      => $checkout_details->payments[0]->shipping_address->getZip(),
-			'country'       => $checkout_details->payments[0]->shipping_address->getCountry(),
+			'first_name' => $first_name,
+			'last_name'  => $last_name,
+			'address_1'  => $checkout_details->payments[0]->shipping_address->getStreet1(),
+			'address_2'  => $checkout_details->payments[0]->shipping_address->getStreet2(),
+			'city'       => $checkout_details->payments[0]->shipping_address->getCity(),
+			'state'      => $checkout_details->payments[0]->shipping_address->getState(),
+			'postcode'   => $checkout_details->payments[0]->shipping_address->getZip(),
+			'country'    => $checkout_details->payments[0]->shipping_address->getCountry(),
 		);
 		if ( ! empty( $checkout_details->payer_details ) && property_exists( $checkout_details->payer_details, 'business_name' ) ) {
 			$result['company'] = $checkout_details->payer_details->business_name;
@@ -609,7 +611,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		if ( is_cart() && ! empty( $_GET['wc-gateway-ppec-clear-session'] ) ) {
 			$this->maybe_clear_session_data();
 
-			$notice =  __( 'You have cancelled Checkout with PayPal. Please try to process your order again.', 'woocommerce-gateway-paypal-express-checkout' );
+			$notice = __( 'You have cancelled Checkout with PayPal. Please try to process your order again.', 'woocommerce-gateway-paypal-express-checkout' );
 			if ( ! wc_has_notice( $notice, 'notice' ) ) {
 				wc_add_notice( $notice, 'notice' );
 			}
@@ -895,11 +897,13 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$client = wc_gateway_ppec()->client;
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 		$order_id = $old_wc ? $order->id : $order->get_id();
-		$params = $client->get_do_express_checkout_params( array(
-			'order_id' => $order_id,
-			'token'    => $token,
-			'payer_id' => $payer_id,
-		) );
+		$params = $client->get_do_express_checkout_params(
+			array(
+				'order_id' => $order_id,
+				'token'    => $token,
+				'payer_id' => $payer_id,
+			)
+		);
 
 		$response = $client->do_express_checkout_payment( $params );
 
@@ -963,7 +967,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		// Handle $payment response
 		if ( 'completed' === strtolower( $payment->payment_status ) ) {
 			$order->payment_complete( $payment->transaction_id );
-			if ( isset( $payment->fee_amount ) ){
+			if ( isset( $payment->fee_amount ) ) {
 				wc_gateway_ppec_set_transaction_fee( $order, $payment->fee_amount );
 			}
 		} else {

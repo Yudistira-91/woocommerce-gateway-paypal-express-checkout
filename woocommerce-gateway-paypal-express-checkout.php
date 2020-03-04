@@ -14,6 +14,7 @@
  * WC tested up to: 3.9
  * WC requires at least: 2.6
  */
+
 /**
  * Copyright (c) 2019 PayPal, Inc.
  *

@@ -2,6 +2,7 @@
 /**
  * Cart handler.
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -199,7 +200,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 		try {
 			wc_gateway_ppec()->checkout->start_checkout_from_cart( $skip_checkout );
 			wp_send_json_success( array( 'token' => WC()->session->paypal->token ) );
-		} catch( PayPal_API_Exception $e ) {
+		} catch ( PayPal_API_Exception $e ) {
 			wp_send_json_error( array( 'messages' => array( $e->getMessage() ) ) );
 		}
 	}
@@ -212,26 +213,30 @@ class WC_Gateway_PPEC_Cart_Handler {
 	protected function set_customer_data( $data ) {
 		$customer = WC()->customer;
 
-		$billing_first_name = empty( $data[ 'billing_first_name' ] ) ? '' : wc_clean( $data[ 'billing_first_name' ] );
-		$billing_last_name  = empty( $data[ 'billing_last_name' ] )  ? '' : wc_clean( $data[ 'billing_last_name' ] );
-		$billing_country    = empty( $data[ 'billing_country' ] )    ? '' : wc_clean( $data[ 'billing_country' ] );
-		$billing_address_1  = empty( $data[ 'billing_address_1' ] )  ? '' : wc_clean( $data[ 'billing_address_1' ] );
-		$billing_address_2  = empty( $data[ 'billing_address_2' ] )  ? '' : wc_clean( $data[ 'billing_address_2' ] );
-		$billing_city       = empty( $data[ 'billing_city' ] )       ? '' : wc_clean( $data[ 'billing_city' ] );
-		$billing_state      = empty( $data[ 'billing_state' ] )      ? '' : wc_clean( $data[ 'billing_state' ] );
-		$billing_postcode   = empty( $data[ 'billing_postcode' ] )   ? '' : wc_clean( $data[ 'billing_postcode' ] );
-		$billing_phone      = empty( $data[ 'billing_phone' ] )      ? '' : wc_clean( $data[ 'billing_phone' ] );
-		$billing_email      = empty( $data[ 'billing_email' ] )      ? '' : wc_clean( $data[ 'billing_email' ] );
+		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
+		$billing_first_name = empty( $data['billing_first_name'] ) ? '' : wc_clean( $data['billing_first_name'] );
+		$billing_last_name  = empty( $data['billing_last_name'] )  ? '' : wc_clean( $data['billing_last_name'] );
+		$billing_country    = empty( $data['billing_country'] )    ? '' : wc_clean( $data['billing_country'] );
+		$billing_address_1  = empty( $data['billing_address_1'] )  ? '' : wc_clean( $data['billing_address_1'] );
+		$billing_address_2  = empty( $data['billing_address_2'] )  ? '' : wc_clean( $data['billing_address_2'] );
+		$billing_city       = empty( $data['billing_city'] )       ? '' : wc_clean( $data['billing_city'] );
+		$billing_state      = empty( $data['billing_state'] )      ? '' : wc_clean( $data['billing_state'] );
+		$billing_postcode   = empty( $data['billing_postcode'] )   ? '' : wc_clean( $data['billing_postcode'] );
+		$billing_phone      = empty( $data['billing_phone'] )      ? '' : wc_clean( $data['billing_phone'] );
+		$billing_email      = empty( $data['billing_email'] )      ? '' : wc_clean( $data['billing_email'] );
+		// phpcs:enable
 
 		if ( isset( $data['ship_to_different_address'] ) ) {
-			$shipping_first_name = empty( $data[ 'shipping_first_name' ] ) ? '' : wc_clean( $data[ 'shipping_first_name' ] );
-			$shipping_last_name  = empty( $data[ 'shipping_last_name' ] )  ? '' : wc_clean( $data[ 'shipping_last_name' ] );
-			$shipping_country    = empty( $data[ 'shipping_country' ] )    ? '' : wc_clean( $data[ 'shipping_country' ] );
-			$shipping_address_1  = empty( $data[ 'shipping_address_1' ] )  ? '' : wc_clean( $data[ 'shipping_address_1' ] );
-			$shipping_address_2  = empty( $data[ 'shipping_address_2' ] )  ? '' : wc_clean( $data[ 'shipping_address_2' ] );
-			$shipping_city       = empty( $data[ 'shipping_city' ] )       ? '' : wc_clean( $data[ 'shipping_city' ] );
-			$shipping_state      = empty( $data[ 'shipping_state' ] )      ? '' : wc_clean( $data[ 'shipping_state' ] );
-			$shipping_postcode   = empty( $data[ 'shipping_postcode' ] )   ? '' : wc_clean( $data[ 'shipping_postcode' ] );
+			// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
+			$shipping_first_name = empty( $data['shipping_first_name'] ) ? '' : wc_clean( $data['shipping_first_name'] );
+			$shipping_last_name  = empty( $data['shipping_last_name'] )  ? '' : wc_clean( $data['shipping_last_name'] );
+			$shipping_country    = empty( $data['shipping_country'] )    ? '' : wc_clean( $data['shipping_country'] );
+			$shipping_address_1  = empty( $data['shipping_address_1'] )  ? '' : wc_clean( $data['shipping_address_1'] );
+			$shipping_address_2  = empty( $data['shipping_address_2'] )  ? '' : wc_clean( $data['shipping_address_2'] );
+			$shipping_city       = empty( $data['shipping_city'] )       ? '' : wc_clean( $data['shipping_city'] );
+			$shipping_state      = empty( $data['shipping_state'] )      ? '' : wc_clean( $data['shipping_state'] );
+			$shipping_postcode   = empty( $data['shipping_postcode'] )   ? '' : wc_clean( $data['shipping_postcode'] );
+			// phpcs:enable
 		} else {
 			$shipping_first_name = $billing_first_name;
 			$shipping_last_name  = $billing_last_name;
@@ -396,9 +401,9 @@ class WC_Gateway_PPEC_Cart_Handler {
 			if ( isset( $gateways['ppec_paypal'] ) && 'yes' === $settings->cart_checkout_enabled && 'yes' === $settings->use_spb ) {
 				wp_enqueue_script( 'wc-gateway-ppec-smart-payment-buttons' );
 			}
-        }
+		}
 		return $widget_title;
-    }
+	}
 
 	/**
 	 * Convert from settings to values expected by PayPal Button API:
@@ -465,15 +470,17 @@ class WC_Gateway_PPEC_Cart_Handler {
 		if ( 'yes' !== $settings->use_spb && $is_cart ) {
 			wp_enqueue_script( 'paypal-checkout-js', 'https://www.paypalobjects.com/api/checkout.js', array(), null, true );
 			wp_enqueue_script( 'wc-gateway-ppec-frontend-in-context-checkout', wc_gateway_ppec()->plugin_url . 'assets/js/wc-gateway-ppec-frontend-in-context-checkout.js', array( 'jquery' ), wc_gateway_ppec()->version, true );
-			wp_localize_script( 'wc-gateway-ppec-frontend-in-context-checkout', 'wc_ppec_context',
+			wp_localize_script(
+				'wc-gateway-ppec-frontend-in-context-checkout',
+				'wc_ppec_context',
 				array(
-					'payer_id'    => $client->get_payer_id(),
-					'environment' => $settings->get_environment(),
-					'locale'      => $settings->get_paypal_locale(),
-					'start_flow'  => esc_url( add_query_arg( array( 'startcheckout' => 'true' ), wc_get_page_permalink( 'cart' ) ) ),
-					'show_modal'  => apply_filters( 'woocommerce_paypal_express_checkout_show_cart_modal', true ),
+					'payer_id'                    => $client->get_payer_id(),
+					'environment'                 => $settings->get_environment(),
+					'locale'                      => $settings->get_paypal_locale(),
+					'start_flow'                  => esc_url( add_query_arg( array( 'startcheckout' => 'true' ), wc_get_page_permalink( 'cart' ) ) ),
+					'show_modal'                  => apply_filters( 'woocommerce_paypal_express_checkout_show_cart_modal', true ),
 					'update_shipping_costs_nonce' => wp_create_nonce( '_wc_ppec_update_shipping_costs_nonce' ),
-					'ajaxurl'     => WC_AJAX::get_endpoint( 'wc_ppec_update_shipping_costs' ),
+					'ajaxurl'                     => WC_AJAX::get_endpoint( 'wc_ppec_update_shipping_costs' ),
 				)
 			);
 
@@ -491,7 +498,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 				'start_checkout_url'   => WC_AJAX::get_endpoint( 'wc_ppec_start_checkout' ),
 			);
 
-			if ( ! is_null(  $page ) ) {
+			if ( ! is_null( $page ) ) {
 				if ( 'product' === $page && 'yes' === $settings->single_product_settings_toggle ) {
 					$button_settings = $this->get_button_settings( $settings, 'single_product' );
 				} elseif ( 'checkout' === $page && 'yes' === $settings->mark_settings_toggle ) {
@@ -505,7 +512,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 
 			$settings_toggle = 'yes' === $settings->mini_cart_settings_toggle;
 			$mini_cart_data  = $this->get_button_settings( $settings, $settings_toggle ? 'mini_cart' : '' );
-			foreach( $mini_cart_data as $key => $value ) {
+			foreach ( $mini_cart_data as $key => $value ) {
 				unset( $mini_cart_data[ $key ] );
 				$mini_cart_data[ 'mini_cart_' . $key ] = $value;
 			}
@@ -516,7 +523,9 @@ class WC_Gateway_PPEC_Cart_Handler {
 
 		if ( $is_product ) {
 			wp_enqueue_script( 'wc-gateway-ppec-generate-cart', wc_gateway_ppec()->plugin_url . 'assets/js/wc-gateway-ppec-generate-cart.js', array( 'jquery' ), wc_gateway_ppec()->version, true );
-			wp_localize_script( 'wc-gateway-ppec-generate-cart', 'wc_ppec_generate_cart_context',
+			wp_localize_script(
+				'wc-gateway-ppec-generate-cart',
+				'wc_ppec_generate_cart_context',
 				array(
 					'generate_cart_nonce' => wp_create_nonce( '_wc_ppec_generate_cart_nonce' ),
 					'ajaxurl'             => WC_AJAX::get_endpoint( 'wc_ppec_generate_cart' ),

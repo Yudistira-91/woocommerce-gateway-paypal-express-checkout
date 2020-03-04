@@ -168,11 +168,13 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 		}
 
 		$client = wc_gateway_ppec()->client;
-		$params = $client->get_do_reference_transaction_params( array(
-			'reference_id' => $billing_agreement_id,
-			'amount'       => $amount,
-			'order_id'     => $order_id,
-		) );
+		$params = $client->get_do_reference_transaction_params(
+			array(
+				'reference_id' => $billing_agreement_id,
+				'amount'       => $amount,
+				'order_id'     => $order_id,
+			)
+		);
 
 		$resp = $client->do_reference_transaction( $params );
 
@@ -218,7 +220,6 @@ class WC_Gateway_PPEC_With_PayPal_Addons extends WC_Gateway_PPEC_With_PayPal {
 				default:
 					throw new Exception( __( 'PayPal payment declined', 'woocommerce-gateway-paypal-express-checkout' ) );
 			}
-
 		} catch ( Exception $e ) {
 			$order->update_status( 'failed', $e->getMessage() );
 		}

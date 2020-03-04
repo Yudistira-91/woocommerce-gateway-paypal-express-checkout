@@ -6,7 +6,6 @@ if ( ! class_exists( 'WC_Abstract_Privacy' ) ) {
 class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Constructor
-	 *
 	 */
 	public function __construct() {
 		parent::__construct( __( 'PayPal Checkout', 'woocommerce-gateway-paypal-express-checkout' ) );
@@ -22,8 +21,8 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 	/**
 	 * Returns a list of orders that are using one of PPEC's payment methods.
 	 *
-	 * @param string  $email_address
-	 * @param int     $page
+	 * @param string $email_address
+	 * @param int    $page
 	 *
 	 * @return array WP_Post
 	 */
@@ -47,7 +46,6 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 
 	/**
 	 * Gets the message of the privacy to display.
-	 *
 	 */
 	public function get_privacy_message() {
 		return wpautop( sprintf( __( 'By using this extension, you may be storing personal data or sharing data with an external service. <a href="%s" target="_blank">Learn more about how this works, including what you may want to include in your privacy policy.</a>', 'woocommerce-gateway-paypal-express-checkout' ), 'https://docs.woocommerce.com/document/privacy-payments/#woocommerce-gateway-paypal-express-checkout' ) );
@@ -111,7 +109,7 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 		$data_to_export = array();
 
 		$meta_query = array(
-			'relation'    => 'AND',
+			'relation' => 'AND',
 			array(
 				'key'     => '_payment_method',
 				'value'   => array( 'ppec_paypal' ),
@@ -125,9 +123,9 @@ class WC_Gateway_PPEC_Privacy extends WC_Abstract_Privacy {
 		);
 
 		$subscription_query    = array(
-			'posts_per_page'  => 10,
-			'page'            => $page,
-			'meta_query'      => $meta_query,
+			'posts_per_page' => 10,
+			'page'           => $page,
+			'meta_query'     => $meta_query,
 		);
 
 		$subscriptions = wcs_get_subscriptions( $subscription_query );

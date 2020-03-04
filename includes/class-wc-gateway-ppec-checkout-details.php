@@ -1,5 +1,4 @@
 <?php
-
 /**
  * TODO: Move each class into its own file and group them under one dir, checkout-details.
  */

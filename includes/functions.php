@@ -7,7 +7,7 @@ function woo_pp_start_checkout() {
 		$redirect_url = $checkout->start_checkout_from_cart();
 		wp_safe_redirect( $redirect_url );
 		exit;
-	} catch( PayPal_API_Exception $e ) {
+	} catch ( PayPal_API_Exception $e ) {
 		wc_add_notice( $e->getMessage(), 'error' );
 
 		$redirect_url = wc_get_cart_url();
@@ -33,7 +33,6 @@ function woo_pp_start_checkout() {
 			wp_safe_redirect( $redirect_url );
 			exit;
 		}
-
 	}
 }
 
@@ -126,19 +125,19 @@ function wc_gateway_ppec_set_transaction_fee( $order, $fee ) {
 function wc_gateway_ppec_get_transaction_fee( $order ) {
 	$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 
-	//retrieve the fee using the new key
+	// retrieve the fee using the new key
 	if ( $old_wc ) {
 		$fee = get_post_meta( $order->id, PPEC_FEE_META_NAME_NEW, true );
 	} else {
 		$fee = $order->get_meta( PPEC_FEE_META_NAME_NEW, true );
 	}
 
-	//if the fee was found, return
+	// if the fee was found, return
 	if ( is_numeric( $fee ) ) {
 		return $fee;
 	}
 
-	//attempt to retrieve the old meta, delete its old key, and migrate it to the new one
+	// attempt to retrieve the old meta, delete its old key, and migrate it to the new one
 	if ( $old_wc ) {
 		$fee = get_post_meta( $order->id, PPEC_FEE_META_NAME_OLD, true );
 		delete_post_meta( $order->id, PPEC_FEE_META_NAME_OLD );
